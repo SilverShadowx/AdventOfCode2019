@@ -71,12 +71,52 @@ namespace AdventOfCode2019Solver_Silver
                 TimeSpan ts = DateTime.Now - dt;
                 Console.WriteLine("TotalTime : " + ts.TotalSeconds.ToString());
             }
+            else if (key.Contains("4a"))
+            {
+                // looking for all combinations that meet conditions
+                // It is a six-digit number.
+                // The value is within the range given in your puzzle input.
+                // Two adjacent digits are the same(like 22 in 122345).
+                // Going from left to right, the digits never decrease; they only ever increase or stay the same(like 111123 or 135679).
+                int rangeLow = 165432;
+                int rangeHigh = 707912;
+                List<int> BruteForce = Enumerable.Range(165432, 707912-rangeLow).ToList();
+                List<int> BruteForceResult = Advent4FilterCombo(BruteForce);
+                Console.WriteLine("Total Combos:" + BruteForceResult.Count());
+            }
             else
             {
                 Console.WriteLine("No Input");
             }
             Console.ReadLine();
         }
+
+        private static List<int> Advent4FilterCombo(List<int> listOfInts)
+        {
+            List<int> Result = new List<int>();
+            foreach(int value in listOfInts)
+            {
+                bool cond1 = false;
+                bool cond2 = false;
+                string parsedValue = value.ToString();
+                cond1 = parsedValue[0] <= parsedValue[1]
+                    && parsedValue[1] <= parsedValue[2]
+                    && parsedValue[2] <= parsedValue[3]
+                    && parsedValue[3] <= parsedValue[4]
+                    && parsedValue[4] <= parsedValue[5];
+                cond2 = (parsedValue[0] == parsedValue[1] && parsedValue[1] != parsedValue[2])
+                    || (parsedValue[1] == parsedValue[2] && parsedValue[2] != parsedValue[3] && parsedValue[1] != parsedValue[0])
+                    || (parsedValue[2] == parsedValue[3] && parsedValue[3] != parsedValue[4] && parsedValue[2] != parsedValue[1])
+                    || (parsedValue[3] == parsedValue[4] && parsedValue[4] != parsedValue[5] && parsedValue[3] != parsedValue[2])
+                    || (parsedValue[4] == parsedValue[5] && parsedValue[4] != parsedValue[3]);
+                if(cond1 && cond2)
+                {
+                    Result.Add(value);
+                }
+            }
+            return Result;
+        }
+
         private static int WireIntersector(List<Wire> Wire1, List<Wire> Wire2)
         {
             int smallDistance = 0;
