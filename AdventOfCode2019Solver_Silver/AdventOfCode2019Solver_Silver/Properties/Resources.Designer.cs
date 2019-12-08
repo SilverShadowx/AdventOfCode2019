@@ -154,5 +154,179 @@ namespace AdventOfCode2019Solver_Silver.Properties {
                 return ResourceManager.GetString("Advent3", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 165432-707912.
+        /// </summary>
+        internal static string Advent4 {
+            get {
+                return ResourceManager.GetString("Advent4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3,225,1,225,6,6,1100,1,238,225,104,0,1001,210,88,224,101,-143,224,224,4,224,1002,223,8,223,101,3,224,224,1,223,224,223,101,42,92,224,101,-78,224,224,4,224,1002,223,8,223,1001,224,3,224,1,223,224,223,1101,73,10,225,1102,38,21,225,1102,62,32,225,1,218,61,224,1001,224,-132,224,4,224,102,8,223,223,1001,224,5,224,1,224,223,223,1102,19,36,225,102,79,65,224,101,-4898,224,224,4,224,102,8,223,223,101,4,224,224,1,224,223,223,1101,66,56,224,1001,224,-122,224,4,224,102,8,223,223,1001,224,2,224,1,224,223,223,1002,58,82, [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Advent5 {
+            get {
+                return ResourceManager.GetString("Advent5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to YQ2)CYG
+        ///63M)X4N
+        ///7YF)LRN
+        ///K2B)PVC
+        ///394)195
+        ///W68)QNR
+        ///XDS)SX7
+        ///JWG)789
+        ///6RR)4R1
+        ///S9Y)M1X
+        ///VDC)R4V
+        ///7G4)4YZ
+        ///XK2)K4M
+        ///R7M)ZHC
+        ///Q14)ZS1
+        ///GJF)4RM
+        ///YQ2)K4G
+        ///T98)2GB
+        ///YRP)3Q9
+        ///SD7)XRN
+        ///DYR)GQZ
+        ///4NV)T6C
+        ///8LL)WLB
+        ///9GX)T7C
+        ///673)Q4F
+        ///V2F)B5Q
+        ///BZN)RPX
+        ///Y2T)X6B
+        ///P89)F2S
+        ///WFQ)JNL
+        ///JJ7)QK7
+        ///HYQ)RWS
+        ///Q97)V15
+        ///NHX)XND
+        ///MHP)P5L
+        ///PPL)H6G
+        ///KVV)535
+        ///8NK)9FG
+        ///B6X)6MG
+        ///MX2)T8M
+        ///7NC)V6V
+        ///ZP1)SN7
+        ///FY5)PJX
+        ///J9S)H1F
+        ///LRZ)VPY
+        ///PSG)S74
+        ///DGK)N44
+        ///QJ1)BRR
+        ///2XM)LVG
+        ///ZG1)QNQ
+        ///72L)QJ1
+        ///GNQ)XT4
+        ///1XJ)PKH
+        ///T3M)ZB7
+        ///JQS)B53
+        ///CNV)7PL
+        ///4MF)9YJ        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Advent6 {
+            get {
+                return ResourceManager.GetString("Advent6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3,8,1001,8,10,8,105,1,0,0,21,34,47,72,81,102,183,264,345,426,99999,3,9,102,5,9,9,1001,9,3,9,4,9,99,3,9,101,4,9,9,1002,9,3,9,4,9,99,3,9,102,3,9,9,101,2,9,9,102,5,9,9,1001,9,3,9,1002,9,4,9,4,9,99,3,9,101,5,9,9,4,9,99,3,9,101,3,9,9,1002,9,5,9,101,4,9,9,102,2,9,9,4,9,99,3,9,1002,9,2,9,4,9,3,9,101,2,9,9,4,9,3,9,102,2,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,1001,9,1,9,4,9,3,9,1001,9,1,9,4,9,3,9,1001,9,2,9,4,9,3,9,101,1,9,9,4,9,99,3,9,101,1,9,9,4,9,3,9,1001,9,2,9,4,9,3,9,102,2,9,9,4,9, [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Advent7 {
+            get {
+                return ResourceManager.GetString("Advent7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 01234
+        ///10234
+        ///20134
+        ///02134
+        ///12034
+        ///21034
+        ///21304
+        ///12304
+        ///32104
+        ///23104
+        ///13204
+        ///31204
+        ///30214
+        ///03214
+        ///23014
+        ///32014
+        ///02314
+        ///20314
+        ///10324
+        ///01324
+        ///31024
+        ///13024
+        ///03124
+        ///30124
+        ///40123
+        ///04123
+        ///14023
+        ///41023
+        ///01423
+        ///10423
+        ///10243
+        ///01243
+        ///21043
+        ///12043
+        ///02143
+        ///20143
+        ///24103
+        ///42103
+        ///12403
+        ///21403
+        ///41203
+        ///14203
+        ///04213
+        ///40213
+        ///20413
+        ///02413
+        ///42013
+        ///24013
+        ///34012
+        ///43012
+        ///03412
+        ///30412
+        ///40312
+        ///04312
+        ///04132
+        ///40132
+        ///10432
+        ///01432
+        ///41032
+        ///14032
+        ///13042
+        ///31042
+        ///01342
+        ///10342
+        ///30142
+        ///03142
+        ///43102
+        ///34102
+        ///14302
+        ///41302
+        ///31402
+        ///13402
+        ///23401
+        ///3 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Advent7Helper {
+            get {
+                return ResourceManager.GetString("Advent7Helper", resourceCulture);
+            }
+        }
     }
 }

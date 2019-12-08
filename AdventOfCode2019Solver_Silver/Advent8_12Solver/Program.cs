@@ -72,7 +72,7 @@ namespace Advent8_12Solver
                 //Height = 2;
                 //Test
                 int NumLayers = Advent8.Length / (Width * Height);
-                Console.WriteLine("Length of Input: " + Advent8.Lenght);
+                Console.WriteLine("Length of Input: " + Advent8.Length);
                 Console.WriteLine("Number of Layers: " + (Advent8.Length / (Width * Height)).ToString());
                 Console.WriteLine("Layer has the least number of 0: " + "Layerx");
                 Console.WriteLine("Layer Value: " + "Result");
