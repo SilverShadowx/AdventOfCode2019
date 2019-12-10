@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Advent8_12Solver
 {
@@ -141,9 +143,10 @@ namespace Advent8_12Solver
             }
             else if(key.Contains("10a") || key.Contains("10b"))
             {
-                List<string> AsteroidLocations = Properties.Resources.Advent10.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
+                //List<string> AsteroidLocations = Properties.Resources.Advent10.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
                 //List<string> AsteroidLocations = Properties.Resources.Advent10Test1.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();//40 asters
                 //List<string> AsteroidLocations = Properties.Resources.Advent10Test2.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();//40 asters
+                List<string> AsteroidLocations = Properties.Resources.Advent10Test3.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();//40 asters
                 List<Asteroid> AsteroidCoordPairs = new List<Asteroid>();
                 int HighestCount = 0;
                 string Coordinates = string.Empty;
@@ -237,6 +240,73 @@ namespace Advent8_12Solver
                 //Simplify(intArray);
                 Console.WriteLine("Exiting Day 10a Coordinates found: " + Coordinates + " With Number of Visible Asteroids." + HighestCount);
                 //Start 10b
+                List<Asteroid> AsteroidsInMap = new List<Asteroid>(AsteroidCoordPairs);
+                List<string> AsteroidsLineOfSight = new List<string>();
+                Dictionary<int, Asteroid> AsteroidsLiving = new Dictionary<int, Asteroid>();
+                int NumberOfAsteroids = 0;
+                bool NotDestoryed = true;
+                // I'm sure there is an simpler way
+                foreach (Asteroid Aether in AsteroidsInMap)
+                {
+                    if (!((Aether.X == AsteroidWithLaser.X) && (Aether.Y == AsteroidWithLaser.Y)))
+                    {
+                        AsteroidsLiving[NumberOfAsteroids] = Aether;
+                        NumberOfAsteroids++;
+                    }
+                    else
+                    {
+
+                    }
+                }
+                while (NotDestoryed)
+                {
+                    foreach (KeyValuePair<int, Asteroid> GibbsFreeEnergy in AsteroidsLiving)
+                    {
+                        // Get slope, y2 - y1/ x1 - x2
+                        bool NegativeY = ((AsteroidWithLaser.Y - GibbsFreeEnergy.Value.Y) < 0);
+                        bool NegativeX = ((AsteroidWithLaser.X - GibbsFreeEnergy.Value.X) < 0);
+                        int[] RunRise = { Math.Abs(AsteroidWithLaser.X - GibbsFreeEnergy.Value.X), Math.Abs(AsteroidWithLaser.Y - GibbsFreeEnergy.Value.Y) };
+                        Simplify(RunRise);
+                        // Positive Slopes
+                        if (!(AsteroidsLineOfSight.Contains(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()))) && !NegativeY && !NegativeX)
+                        {
+                            AsteroidsLineOfSight.Add(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()));
+                        }
+                        // Down and Right
+                        if (NegativeY && !NegativeX)
+                        {
+                            RunRise[1] = RunRise[1] * -1;
+                            if (!(AsteroidsLineOfSight.Contains(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()))))
+                            {
+                                AsteroidsLineOfSight.Add(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()));
+                            }
+                        }
+                        // Up and Left
+                        if (!NegativeY && NegativeX)
+                        {
+                            RunRise[0] = RunRise[0] * -1;
+                            if (!(AsteroidsLineOfSight.Contains(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()))))
+                            {
+                                AsteroidsLineOfSight.Add(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()));
+                            }
+                        }
+                        // Down and Right
+                        if (NegativeY && NegativeX)
+                        {
+                            RunRise[0] = RunRise[0] * -1;
+                            RunRise[1] = RunRise[1] * -1;
+                            if (!(AsteroidsLineOfSight.Contains(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()))))
+                            {
+                                AsteroidsLineOfSight.Add(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()));
+                            }
+                        }
+                    }
+                    //comapare them
+                    foreach(string str in AsteroidsLineOfSight)
+                    {
+
+                    }
+                }
             }
             else
             {
@@ -531,5 +601,4 @@ namespace Advent8_12Solver
             return args.Aggregate((gcd, arg) => GCD(gcd, arg));
         }
     }
-
 }
