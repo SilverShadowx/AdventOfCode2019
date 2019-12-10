@@ -123,12 +123,14 @@ namespace Advent8_12Solver
                 }
                 Console.WriteLine("___________________________________________________");
             }
-            else if(key.Contains("9a"))
+            else if(key.Contains("9a") || key.Contains("9b"))
             {
                 string[] Advent9Values = Properties.Resources.Advent9.Split(',');
                 //string[] Advent9Values = "109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99".Split(',');
-                //string[] Advent9Values = "1102,34915192,34915192,7,4,7,99,0".Split(',');
-                long input = 1;//(key.Contains("5a")) ? 1 : 5; //43210
+                //string[] Advent9Values = "1102,34915192,34915192,7,4,7,99,0".Split(','); 
+                //string[] Advent9Values = "3,225,1,225,6,6,1100,1,238,225,104,0,1001,210,88,224,101,-143,224,224,4,224,1002,223,8,223,101,3,224,224,1,223,224,223,101,42,92,224,101,-78,224,224,4,224,1002,223,8,223,1001,224,3,224,1,223,224,223,1101,73,10,225,1102,38,21,225,1102,62,32,225,1,218,61,224,1001,224,-132,224,4,224,102,8,223,223,1001,224,5,224,1,224,223,223,1102,19,36,225,102,79,65,224,101,-4898,224,224,4,224,102,8,223,223,101,4,224,224,1,224,223,223,1101,66,56,224,1001,224,-122,224,4,224,102,8,223,223,1001,224,2,224,1,224,223,223,1002,58,82,224,101,-820,224,224,4,224,1002,223,8,223,101,3,224,224,1,223,224,223,2,206,214,224,1001,224,-648,224,4,224,102,8,223,223,101,3,224,224,1,223,224,223,1102,76,56,224,1001,224,-4256,224,4,224,102,8,223,223,1001,224,6,224,1,223,224,223,1102,37,8,225,1101,82,55,225,1102,76,81,225,1101,10,94,225,4,223,99,0,0,0,677,0,0,0,0,0,0,0,0,0,0,0,1105,0,99999,1105,227,247,1105,1,99999,1005,227,99999,1005,0,256,1105,1,99999,1106,227,99999,1106,0,265,1105,1,99999,1006,0,99999,1006,227,274,1105,1,99999,1105,1,280,1105,1,99999,1,225,225,225,1101,294,0,0,105,1,0,1105,1,99999,1106,0,300,1105,1,99999,1,225,225,225,1101,314,0,0,106,0,0,1105,1,99999,8,226,677,224,102,2,223,223,1005,224,329,101,1,223,223,1008,677,677,224,1002,223,2,223,1006,224,344,1001,223,1,223,107,226,677,224,102,2,223,223,1005,224,359,1001,223,1,223,1108,677,677,224,1002,223,2,223,1006,224,374,101,1,223,223,1107,677,677,224,1002,223,2,223,1006,224,389,101,1,223,223,108,226,677,224,102,2,223,223,1006,224,404,101,1,223,223,7,677,677,224,102,2,223,223,1006,224,419,101,1,223,223,108,677,677,224,102,2,223,223,1006,224,434,1001,223,1,223,7,226,677,224,102,2,223,223,1006,224,449,1001,223,1,223,108,226,226,224,102,2,223,223,1005,224,464,101,1,223,223,8,226,226,224,1002,223,2,223,1006,224,479,101,1,223,223,1008,226,226,224,102,2,223,223,1005,224,494,1001,223,1,223,1008,677,226,224,1002,223,2,223,1005,224,509,101,1,223,223,7,677,226,224,102,2,223,223,1006,224,524,101,1,223,223,1007,677,226,224,1002,223,2,223,1006,224,539,1001,223,1,223,1108,677,226,224,102,2,223,223,1005,224,554,1001,223,1,223,8,677,226,224,1002,223,2,223,1005,224,569,101,1,223,223,1108,226,677,224,1002,223,2,223,1005,224,584,101,1,223,223,1107,677,226,224,102,2,223,223,1006,224,599,101,1,223,223,107,226,226,224,102,2,223,223,1006,224,614,1001,223,1,223,107,677,677,224,1002,223,2,223,1005,224,629,1001,223,1,223,1107,226,677,224,1002,223,2,223,1006,224,644,101,1,223,223,1007,677,677,224,102,2,223,223,1006,224,659,1001,223,1,223,1007,226,226,224,1002,223,2,223,1006,224,674,1001,223,1,223,4,223,99,226".Split(',');
+                //string[] Advent9Values = "104,1125899906842624,99".Split(',');
+                long input = key.Contains("9b") ? 2 : 1;//(key.Contains("5a")) ? 1 : 5; //43210
                 Dictionary<long, long> DictionaryOfInt = new Dictionary<long, long>();
                 for (int i = 0; i < Advent9Values.Length; i++)
                 {
@@ -136,6 +138,35 @@ namespace Advent8_12Solver
                 }
                 long result = Advent9OpCodeReader(DictionaryOfInt, input);
                 Console.WriteLine("Exiting Day 9a: " + result);
+            }
+            else if(key.Contains("10a"))
+            {
+                List<string> AsteroidLocations = Properties.Resources.Advent10.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
+                List<Asteroid> AsteroidCoordPairs = new List<Asteroid>();
+                Dictionary<int, int> AsteroidDetected = new Dictionary<int, int>();
+                for(int y = 0; y < AsteroidLocations.Count; y++)
+                {
+                    string str = AsteroidLocations[y];
+                    for(int x = 0; x<str.Length; x++)
+                    {
+                        if(str[x] == '#')
+                        {                            
+                            AsteroidCoordPairs.Add(new Asteroid(x, y));
+                        }
+                    }
+                }
+                int ID = 0;
+                foreach(Asteroid Astra in AsteroidCoordPairs)
+                {
+                    List<Asteroid> AsteroidsInBoard = new List<Asteroid>(AsteroidCoordPairs);
+                    //Dictionary<int, Asteroid> CurrentDetected = 
+                    foreach(Asteroid Aether in AsteroidsInBoard)
+                    {
+
+                    }
+                }
+                int[] intArray = { 4, 8 };
+                Simplify(intArray);
             }
             else
             {
@@ -218,7 +249,7 @@ namespace Advent8_12Solver
                 }
                 else if (OpCode == 9)// sets relativebase
                 {
-                    relativeBase =+ ReadModeAdvent9(TheCode, LocCode, i + 1, 2, relativeBase);
+                    relativeBase = relativeBase + ReadModeAdvent9(TheCode, LocCode, i + 1, 2, relativeBase);
                     i += 2;
                 }
                 else
@@ -268,7 +299,7 @@ namespace Advent8_12Solver
                 bool Relative = value[pos] == '2';
                 if (Immidiate)
                 {
-                    if (items.ContainsKey(Math.Abs(index)))
+                    if (items.ContainsKey(index))
                     {
                         result = items[index];
                     }
@@ -280,26 +311,42 @@ namespace Advent8_12Solver
                 }
                 else if (Relative)
                 {
-                    if (items.ContainsKey(Math.Abs(items[index] + relativeBase)))
+                    if (items.ContainsKey(index)) //minor change
                     {
-                        result = items[items[index] + relativeBase];
+                        if (items.ContainsKey(items[index] + relativeBase))
+                        {
+                            result = items[items[index] + relativeBase];
+                        }
+                        else
+                        {
+                            items[items[index] + relativeBase] = 0;
+                            result = items[items[index] + relativeBase];
+                        }
                     }
                     else
                     {
-                        items[items[index] + relativeBase] = 0;
-                        result = items[items[index] + relativeBase];
+                        items[index] = 0;
+                        if (items.ContainsKey(items[items[index] + relativeBase]))
+                        {
+                            result = items[items[index] + relativeBase];
+                        }
+                        else
+                        {
+                            items[items[index] + relativeBase] = 0;
+                            result = items[items[index] + relativeBase];
+                        }
                     }
                 }
                 else//Positional
                 {
-                    if (items.ContainsKey(Math.Abs(items[index])))
+                    if (items.ContainsKey(items[index]))
                     {
-                        result = items[Math.Abs(items[index])];
+                        result = items[items[index]];
                     }
                     else
                     {
-                        items[Math.Abs(items[index])] = 0;
-                        result = items[Math.Abs(items[index])];
+                        items[items[index]] = 0;
+                        result = items[items[index]];
                     }
                 }
             }
@@ -326,33 +373,58 @@ namespace Advent8_12Solver
                 }
                 else if (Relative)
                 {
-                    if (items.ContainsKey(Math.Abs(items[index] + relativeBase)))
+                    if (items.ContainsKey(index)) //minor change
                     {
-                        items[items[index] + relativeBase] = result;
+                        if (items.ContainsKey(items[index] + relativeBase))
+                        {
+                            items[items[index] + relativeBase] = result;
+                        }
+                        else
+                        {
+                            items[items[index] + relativeBase] = 0;
+                            items[items[index] + relativeBase] = result;
+                        }
                     }
                     else
                     {
-                        items[items[index] + relativeBase] = 0;
-                        items[items[index] + relativeBase] = result;
+                        items[index] = 0;
+                        if (items.ContainsKey(items[items[index] + relativeBase]))
+                        {
+                            items[items[index] + relativeBase] = result;
+                        }
+                        else
+                        {
+                            items[items[index] + relativeBase] = 0;
+                            items[items[index] + relativeBase] = result;
+                        }
                     }
                 }
                 else//Positional
                 {
-                    if (items.ContainsKey(Math.Abs(items[index])))
+                    if (items.ContainsKey(items[index]))
                     {
-                        items[Math.Abs(items[index])] = result;
+                        items[items[index]] = result;
                     }
                     else
                     {
-                        items[Math.Abs(items[index])] = 0;
-                        items[Math.Abs(items[index])] = result;
+                        items[items[index]] = 0;
+                        items[items[index]] = result;
                     }
                 }
             }
         }
 
-
-        //// Thank you StackOverFlowGuy
+        private class Asteroid
+        {
+            int X = 0;
+            int Y = 0;
+            public Asteroid(int x, int y)
+            {
+                this.X = x;
+                this.Y = y;
+            }
+        }
+        //Stack Overflow function/methods borrowed
         //// https://stackoverflow.com/questions/9367119/replacing-a-char-at-a-given-index-in-string
         //public static string ReplaceAt(this string input, int index, char newChar)
         //{
@@ -364,6 +436,29 @@ namespace Advent8_12Solver
         //chars[index] = newChar;
         //return new string (chars);
         //}
+        //
+
+        private static void Simplify(int[] numbers)
+        {
+            int gcd = GCD(numbers);
+            for (int i = 0; i < numbers.Length; i++)
+                numbers[i] /= gcd;
+        }
+        private static int GCD(int a, int b)
+        {
+            while (b > 0)
+            {
+                int rem = a % b;
+                a = b;
+                b = rem;
+            }
+            return a;
+        }
+        private static int GCD(int[] args)
+        {
+            // using LINQ:
+            return args.Aggregate((gcd, arg) => GCD(gcd, arg));
+        }
     }
 
 }
