@@ -139,34 +139,104 @@ namespace Advent8_12Solver
                 long result = Advent9OpCodeReader(DictionaryOfInt, input);
                 Console.WriteLine("Exiting Day 9a: " + result);
             }
-            else if(key.Contains("10a"))
+            else if(key.Contains("10a") || key.Contains("10b"))
             {
                 List<string> AsteroidLocations = Properties.Resources.Advent10.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
+                //List<string> AsteroidLocations = Properties.Resources.Advent10Test1.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();//40 asters
+                //List<string> AsteroidLocations = Properties.Resources.Advent10Test2.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();//40 asters
                 List<Asteroid> AsteroidCoordPairs = new List<Asteroid>();
-                Dictionary<int, int> AsteroidDetected = new Dictionary<int, int>();
-                for(int y = 0; y < AsteroidLocations.Count; y++)
+                int HighestCount = 0;
+                string Coordinates = string.Empty;
+                int[] CoordinatesAsRectangular = { 0, 0 };
+                Asteroid AsteroidWithLaser = new Asteroid(0,0);
+                for (int y = 0; y < AsteroidLocations.Count; y++)
                 {
                     string str = AsteroidLocations[y];
-                    for(int x = 0; x<str.Length; x++)
+                    for (int x = 0; x < str.Length; x++)
                     {
-                        if(str[x] == '#')
-                        {                            
+                        if (str[x] == '#')
+                        {
                             AsteroidCoordPairs.Add(new Asteroid(x, y));
                         }
                     }
                 }
-                int ID = 0;
-                foreach(Asteroid Astra in AsteroidCoordPairs)
+                foreach (Asteroid Astra in AsteroidCoordPairs)
                 {
                     List<Asteroid> AsteroidsInBoard = new List<Asteroid>(AsteroidCoordPairs);
-                    //Dictionary<int, Asteroid> CurrentDetected = 
-                    foreach(Asteroid Aether in AsteroidsInBoard)
+                    Dictionary<int, Asteroid> CurrentDetected = new Dictionary<int, Asteroid>();
+                    List<string> AsteroidsInSight = new List<string>();
+                    int Index = 0;
+                    // I'm sure there is an simpler way
+                    foreach (Asteroid Aether in AsteroidsInBoard)
                     {
+                        if (!((Aether.X == Astra.X) && (Aether.Y == Astra.Y)))
+                        {
+                            CurrentDetected[Index] = Aether;
+                            Index++;
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                    // comparing current Asteroid to all others
+                    foreach (KeyValuePair<int, Asteroid> GibbsFreeEnergy in CurrentDetected)
+                    {
+                        // Get slope, y2 - y1/ x1 - x2
+                        bool NegativeY = ((Astra.Y - GibbsFreeEnergy.Value.Y) < 0);
+                        bool NegativeX = ((Astra.X - GibbsFreeEnergy.Value.X) < 0);
+                        int[] RunRise = { Math.Abs(Astra.X - GibbsFreeEnergy.Value.X), Math.Abs(Astra.Y - GibbsFreeEnergy.Value.Y) };
+                        Simplify(RunRise);
+                        // Positive Slopes
+                        if (!(AsteroidsInSight.Contains(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()))) && !NegativeY && !NegativeX)
+                        {
+                            AsteroidsInSight.Add(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()));
+                        }
+                        // Down and Right
+                        if (NegativeY && !NegativeX)
+                        {
+                            RunRise[1] = RunRise[1] * -1;
+                            if (!(AsteroidsInSight.Contains(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()))))
+                            {
+                                AsteroidsInSight.Add(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()));
+                            }
+                        }
+                        // Up and Left
+                        if (!NegativeY && NegativeX)
+                        {
+                            RunRise[0] = RunRise[0] * -1;
+                            if (!(AsteroidsInSight.Contains(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()))))
+                            {
+                                AsteroidsInSight.Add(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()));
+                            }
+                        }
+                        // Down and Right
+                        if (NegativeY && NegativeX)
+                        {
+                            RunRise[0] = RunRise[0] * -1;
+                            RunRise[1] = RunRise[1] * -1;
+                            if (!(AsteroidsInSight.Contains(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()))))
+                            {
+                                AsteroidsInSight.Add(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()));
+                            }
+                        }
+
 
                     }
+                    Astra.VisibleAsteroids = AsteroidsInSight.Count;
+                    if(AsteroidsInSight.Count > HighestCount)
+                    {
+                        HighestCount = AsteroidsInSight.Count;
+                        Coordinates = Astra.X.ToString() + ", " + Astra.Y.ToString();
+                        CoordinatesAsRectangular[0] = Astra.X;
+                        CoordinatesAsRectangular[1] = Astra.Y;
+                        AsteroidWithLaser = Astra;
+                    }
                 }
-                int[] intArray = { 4, 8 };
-                Simplify(intArray);
+                //int[] intArray = { Math.Abs(-4), 8 };
+                //Simplify(intArray);
+                Console.WriteLine("Exiting Day 10a Coordinates found: " + Coordinates + " With Number of Visible Asteroids." + HighestCount);
+                //Start 10b
             }
             else
             {
@@ -416,8 +486,9 @@ namespace Advent8_12Solver
 
         private class Asteroid
         {
-            int X = 0;
-            int Y = 0;
+            public int X = 0;
+            public int Y = 0;
+            public int VisibleAsteroids = 0;
             public Asteroid(int x, int y)
             {
                 this.X = x;
