@@ -49,7 +49,7 @@ namespace Advent8_12Solver
                         PictureLayers.Add(Advent8.Substring(i * Width * Height, Advent8.Length - (i * Width * Height)));
                         NumZeros = Advent8.Substring(i * Width * Height, Width * Height).Count(x => x == '0');
                     }
-                    if(NumZeros < LeastZero)
+                    if (NumZeros < LeastZero)
                     {
                         LeastZero = NumZeros;
                         LeastLayer = i;
@@ -62,7 +62,7 @@ namespace Advent8_12Solver
                 Console.WriteLine("Layer String: " + Result);
                 Console.WriteLine("Result Parsing Layer: " + (NumberOfOne * NumberOfTwo));
             }
-            else if(key.Contains("8b"))
+            else if (key.Contains("8b"))
             {
                 string Advent8 = Properties.Resources.Advent8;
                 int Width = 25;
@@ -94,9 +94,9 @@ namespace Advent8_12Solver
                 // I have layers
                 string TopLevel = string.Empty;
                 TopLevel = PictureLayers.Count > 0 ? TopLevel = PictureLayers[0] : string.Empty;
-                foreach(string str in PictureLayers)
+                foreach (string str in PictureLayers)
                 {
-                    for(int i = 0; i < Width * Height; i++)
+                    for (int i = 0; i < Width * Height; i++)
                     {
                         if (TopLevel[i] < str[i]) // if TopLevel is basically already 1 or 0, keep it chill
                         {
@@ -118,14 +118,14 @@ namespace Advent8_12Solver
                 Console.WriteLine("___________________________________________________");
                 Console.WriteLine("This is the Picture we have been waiting for.");
                 Console.WriteLine("___________________________________________________");
-                while(Index < Height)
+                while (Index < Height)
                 {
-                    Console.WriteLine(TopLevel.Substring(Index*Width, Width));
+                    Console.WriteLine(TopLevel.Substring(Index * Width, Width));
                     Index++;
                 }
                 Console.WriteLine("___________________________________________________");
             }
-            else if(key.Contains("9a") || key.Contains("9b"))
+            else if (key.Contains("9a") || key.Contains("9b"))
             {
                 string[] Advent9Values = Properties.Resources.Advent9.Split(',');
                 //string[] Advent9Values = "109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99".Split(',');
@@ -141,17 +141,17 @@ namespace Advent8_12Solver
                 long result = Advent9OpCodeReader(DictionaryOfInt, input);
                 Console.WriteLine("Exiting Day 9a: " + result);
             }
-            else if(key.Contains("10a") || key.Contains("10b"))
+            else if (key.Contains("10a"))
             {
-                //List<string> AsteroidLocations = Properties.Resources.Advent10.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
+                List<string> AsteroidLocations = Properties.Resources.Advent10.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
                 //List<string> AsteroidLocations = Properties.Resources.Advent10Test1.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();//40 asters
                 //List<string> AsteroidLocations = Properties.Resources.Advent10Test2.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();//40 asters
-                List<string> AsteroidLocations = Properties.Resources.Advent10Test3.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();//40 asters
+                //List<string> AsteroidLocations = Properties.Resources.Advent10Test3.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();//40 asters
                 List<Asteroid> AsteroidCoordPairs = new List<Asteroid>();
                 int HighestCount = 0;
                 string Coordinates = string.Empty;
                 int[] CoordinatesAsRectangular = { 0, 0 };
-                Asteroid AsteroidWithLaser = new Asteroid(0,0);
+                Asteroid AsteroidWithLaser = new Asteroid(0, 0);
                 for (int y = 0; y < AsteroidLocations.Count; y++)
                 {
                     string str = AsteroidLocations[y];
@@ -227,7 +227,7 @@ namespace Advent8_12Solver
 
                     }
                     Astra.VisibleAsteroids = AsteroidsInSight.Count;
-                    if(AsteroidsInSight.Count > HighestCount)
+                    if (AsteroidsInSight.Count > HighestCount)
                     {
                         HighestCount = AsteroidsInSight.Count;
                         Coordinates = Astra.X.ToString() + ", " + Astra.Y.ToString();
@@ -238,14 +238,32 @@ namespace Advent8_12Solver
                 }
                 //int[] intArray = { Math.Abs(-4), 8 };
                 //Simplify(intArray);
-                Console.WriteLine("Exiting Day 10a Coordinates found: " + Coordinates + " With Number of Visible Asteroids." + HighestCount);
+                Console.WriteLine("Exiting Day 10a Coordinates found: " + Coordinates + " With Number of Visible Asteroids." + HighestCount);               
+            }
+            else if (key.Contains("10b"))
+            {
+                List<string> AsteroidLocations = Properties.Resources.Advent10.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();//40 asters
+                List<Asteroid> AsteroidCoordPairs = new List<Asteroid>();
+                Asteroid AsteroidWithLaser = new Asteroid(11, 11);
+                for (int y = 0; y < AsteroidLocations.Count; y++)
+                {
+                    string str = AsteroidLocations[y];
+                    for (int x = 0; x < str.Length; x++)
+                    {
+                        if (str[x] == '#')
+                        {
+                            AsteroidCoordPairs.Add(new Asteroid(x, y));
+                        }
+                    }
+                }
                 //Start 10b
                 List<Asteroid> AsteroidsInMap = new List<Asteroid>(AsteroidCoordPairs);
-                List<string> AsteroidsLineOfSight = new List<string>();
                 Dictionary<int, Asteroid> AsteroidsLiving = new Dictionary<int, Asteroid>();
                 int NumberOfAsteroids = 0;
                 bool NotDestoryed = true;
+                int Destoryed = 0;
                 // I'm sure there is an simpler way
+                AsteroidsInMap = AsteroidsInMap.OrderBy(o => o.X).ToList();
                 foreach (Asteroid Aether in AsteroidsInMap)
                 {
                     if (!((Aether.X == AsteroidWithLaser.X) && (Aether.Y == AsteroidWithLaser.Y)))
@@ -260,34 +278,72 @@ namespace Advent8_12Solver
                 }
                 while (NotDestoryed)
                 {
+                    List<Asteroid> Detected = new List<Asteroid>();
+                    List<Asteroid> NotDetected = new List<Asteroid>();
+                    Dictionary<int,string> AsteroidsLineOfSight = new Dictionary<int, string>();
+                    // remove Asteroids in Asteroid living based on those detected
+                    int numberDetect = 0;
                     foreach (KeyValuePair<int, Asteroid> GibbsFreeEnergy in AsteroidsLiving)
                     {
                         // Get slope, y2 - y1/ x1 - x2
-                        bool NegativeY = ((AsteroidWithLaser.Y - GibbsFreeEnergy.Value.Y) < 0);
-                        bool NegativeX = ((AsteroidWithLaser.X - GibbsFreeEnergy.Value.X) < 0);
+                        bool NegativeY = ((GibbsFreeEnergy.Value.Y - AsteroidWithLaser.Y) < 0);
+                        bool NegativeX = ((GibbsFreeEnergy.Value.X - AsteroidWithLaser.X) < 0);
                         int[] RunRise = { Math.Abs(AsteroidWithLaser.X - GibbsFreeEnergy.Value.X), Math.Abs(AsteroidWithLaser.Y - GibbsFreeEnergy.Value.Y) };
                         Simplify(RunRise);
                         // Positive Slopes
-                        if (!(AsteroidsLineOfSight.Contains(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()))) && !NegativeY && !NegativeX)
+                        if (!NegativeX && !NegativeY)
                         {
-                            AsteroidsLineOfSight.Add(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()));
+                            if (!(AsteroidsLineOfSight.ContainsValue(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()))) && !NegativeY && !NegativeX)
+                            {
+                                AsteroidsLineOfSight[numberDetect]  = (String.Join(",", RunRise.Select(p => p.ToString()).ToArray()));
+                                Detected.Add(GibbsFreeEnergy.Value);
+                                numberDetect++;
+                            }
+                            else if (AsteroidsLineOfSight.ContainsValue(String.Join(",", RunRise.Select(p => p.ToString()).ToArray())))
+                            {
+                                var otherAster = AsteroidsLineOfSight.Where(kvp => (kvp.Value == (String.Join(",", RunRise.Select(p => p.ToString()))))).First();
+                                if (ManhattanDistance(Detected[otherAster.Key].X, Detected[otherAster.Key].Y, AsteroidWithLaser.X, AsteroidWithLaser.Y) > ManhattanDistance(GibbsFreeEnergy.Value.X, GibbsFreeEnergy.Value.Y, AsteroidWithLaser.X, AsteroidWithLaser.Y))
+                                {
+                                    Detected[otherAster.Key] = GibbsFreeEnergy.Value;
+                                }
+                            }
                         }
                         // Down and Right
                         if (NegativeY && !NegativeX)
                         {
                             RunRise[1] = RunRise[1] * -1;
-                            if (!(AsteroidsLineOfSight.Contains(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()))))
+                            if (!(AsteroidsLineOfSight.ContainsValue(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()))))
                             {
-                                AsteroidsLineOfSight.Add(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()));
+                                AsteroidsLineOfSight[numberDetect] = (String.Join(",", RunRise.Select(p => p.ToString()).ToArray()));
+                                Detected.Add(GibbsFreeEnergy.Value);
+                                numberDetect++;
+                            }
+                            else if (AsteroidsLineOfSight.ContainsValue(String.Join(",", RunRise.Select(p => p.ToString()).ToArray())))
+                            {
+                                var otherAster = AsteroidsLineOfSight.Where(kvp => (kvp.Value == (String.Join(",", RunRise.Select(p => p.ToString()))))).First();
+                                if (ManhattanDistance(Detected[otherAster.Key].X, Detected[otherAster.Key].Y, AsteroidWithLaser.X, AsteroidWithLaser.Y) > ManhattanDistance(GibbsFreeEnergy.Value.X, GibbsFreeEnergy.Value.Y, AsteroidWithLaser.X, AsteroidWithLaser.Y))
+                                {
+                                    Detected[otherAster.Key] = GibbsFreeEnergy.Value;
+                                }
                             }
                         }
                         // Up and Left
                         if (!NegativeY && NegativeX)
                         {
                             RunRise[0] = RunRise[0] * -1;
-                            if (!(AsteroidsLineOfSight.Contains(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()))))
+                            if (!(AsteroidsLineOfSight.ContainsValue(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()))))
                             {
-                                AsteroidsLineOfSight.Add(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()));
+                                AsteroidsLineOfSight[numberDetect] = (String.Join(",", RunRise.Select(p => p.ToString()).ToArray()));
+                                Detected.Add(GibbsFreeEnergy.Value);
+                                numberDetect++;
+                            }
+                            else if (AsteroidsLineOfSight.ContainsValue(String.Join(",", RunRise.Select(p => p.ToString()).ToArray())))
+                            {
+                                var otherAster = AsteroidsLineOfSight.Where(kvp => (kvp.Value == (String.Join(",", RunRise.Select(p => p.ToString()))))).First();
+                                if (ManhattanDistance(Detected[otherAster.Key].X, Detected[otherAster.Key].Y, AsteroidWithLaser.X, AsteroidWithLaser.Y) > ManhattanDistance(GibbsFreeEnergy.Value.X, GibbsFreeEnergy.Value.Y, AsteroidWithLaser.X, AsteroidWithLaser.Y))
+                                {
+                                    Detected[otherAster.Key] = GibbsFreeEnergy.Value;
+                                }
                             }
                         }
                         // Down and Right
@@ -295,16 +351,168 @@ namespace Advent8_12Solver
                         {
                             RunRise[0] = RunRise[0] * -1;
                             RunRise[1] = RunRise[1] * -1;
-                            if (!(AsteroidsLineOfSight.Contains(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()))))
+                            if (!(AsteroidsLineOfSight.ContainsValue(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()))))
                             {
-                                AsteroidsLineOfSight.Add(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()));
+                                AsteroidsLineOfSight[numberDetect] = (String.Join(",", RunRise.Select(p => p.ToString()).ToArray()));
+                                Detected.Add(GibbsFreeEnergy.Value);
+                                numberDetect++;
                             }
-                        }
+                            else if (AsteroidsLineOfSight.ContainsValue(String.Join(",", RunRise.Select(p => p.ToString()).ToArray())))
+                            {
+                                var otherAster = AsteroidsLineOfSight.Where(kvp => (kvp.Value == (String.Join(",", RunRise.Select(p => p.ToString()))))).First();
+                                if (ManhattanDistance(Detected[otherAster.Key].X, Detected[otherAster.Key].Y, AsteroidWithLaser.X, AsteroidWithLaser.Y) > ManhattanDistance(GibbsFreeEnergy.Value.X, GibbsFreeEnergy.Value.Y, AsteroidWithLaser.X, AsteroidWithLaser.Y))
+                                {
+                                    Detected[otherAster.Key] = GibbsFreeEnergy.Value;
+                                }
+                            }
+                        }     
+                        
                     }
                     //comapare them
-                    foreach(string str in AsteroidsLineOfSight)
-                    {
+                    //Console.WriteLine("Deleting");
+                    NotDestoryed = AsteroidsLiving.Count > 0;
+                        if (Detected.Any(posTarget => posTarget.X >= AsteroidWithLaser.X && posTarget.Y < AsteroidWithLaser.Y))
+                        {
+                            var posTargetList = Detected.Where(posTarget => posTarget.X >= AsteroidWithLaser.X && posTarget.Y < AsteroidWithLaser.Y).ToList();
+                            posTargetList = posTargetList.OrderBy(o => Math.Abs(AsteroidWithLaser.X - o.X) / (AsteroidWithLaser.Y - o.Y != 0 ? Math.Abs(AsteroidWithLaser.Y - o.Y) : .1)).ToList();
+                            if (posTargetList.Count() < 200 - Destoryed)
+                            {
+                                foreach (Asteroid posAsters in posTargetList)
+                                {
+                                    var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAsters.X && kvp.Value.Y == posAsters.Y));
+                                    if (item.Count() > 0)
+                                    {
+                                        Console.WriteLine("Bam " + Destoryed + " : " + item.First().Value.X + ", " + item.First().Value.Y);
+                                        AsteroidsLiving.Remove(item.First().Key);
+                                        Destoryed++;
+                                    }
+                                }
+                            }
+                            else // there are more items than the number we would destroy
+                            {
+                                foreach (Asteroid posAstersALot in posTargetList)
+                                {
+                                    var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAstersALot.X && kvp.Value.Y == posAstersALot.Y));
+                                    Console.WriteLine("Bam " + Destoryed + " : " + item.First().Value.X + ", " + item.First().Value.Y);
+                                    AsteroidsLiving.Remove(item.First().Key);
+                                    Destoryed++;
+                                    if (Destoryed == 200)
+                                    {
+                                        Console.WriteLine("CoordsLocatedForLastTarget: " + posAstersALot.X.ToString() + ", " + posAstersALot.Y.ToString());
+                                        Console.WriteLine("10b Bet winning asteroid: " + (posAstersALot.X * 100 + posAstersALot.Y).ToString());
+                                    }
+                                }
+                            }
+                        }
+                        //LowerRightCords
+                        if (Detected.Any(posTarget => posTarget.X > AsteroidWithLaser.X && posTarget.Y >= AsteroidWithLaser.Y))
+                        {
+                            var posTargetList = Detected.Where(posTarget => posTarget.X > AsteroidWithLaser.X && posTarget.Y >= AsteroidWithLaser.Y).ToList();
+                            posTargetList = posTargetList.OrderBy(o => 
+                            Math.Abs(AsteroidWithLaser.X - o.X)/ (AsteroidWithLaser.Y - o.Y != 0 ? AsteroidWithLaser.Y - o.Y : -.1)).ToList();
+                            if (posTargetList.Count() < 200 - Destoryed)
+                            {
+                                foreach (Asteroid posAsters in posTargetList)
+                                {
+                                    var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAsters.X && kvp.Value.Y == posAsters.Y));
+                                    if (item.Count() > 0)
+                                    {
+                                        Console.WriteLine("Bam " + Destoryed + " : " + item.First().Value.X + ", " + item.First().Value.Y);
+                                        AsteroidsLiving.Remove(item.First().Key);
+                                        Destoryed++;
+                                    }
+                                }
+                            }
+                            else // there are more items than the number we would destroy
+                            {
+                                foreach (Asteroid posAstersALot in posTargetList)
+                                {
+                                    var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAstersALot.X && kvp.Value.Y == posAstersALot.Y));
+                                    Console.WriteLine("Bam " + Destoryed + " : " + item.First().Value.X + ", " + item.First().Value.Y);
+                                    AsteroidsLiving.Remove(item.First().Key);
+                                    Destoryed++;
+                                    if (Destoryed == 200)
+                                    {
+                                        Console.WriteLine("CoordsLocatedForLastTarget: " + posAstersALot.X.ToString() + ", " + posAstersALot.Y.ToString());
+                                        Console.WriteLine("10b Bet winning asteroid: " + (posAstersALot.X * 100 + posAstersALot.Y).ToString());
+                                    }
+                                }
+                            }
+                        }
+                        //LowerLeftCords
+                        if (Detected.Any(posTarget => posTarget.X <= AsteroidWithLaser.X && posTarget.Y > AsteroidWithLaser.Y))
+                        {
+                            var posTargetList = Detected.Where(posTarget => posTarget.X <= AsteroidWithLaser.X && posTarget.Y > AsteroidWithLaser.Y).ToList();
+                            posTargetList = posTargetList.OrderBy(o => 
+                            Math.Abs(AsteroidWithLaser.X - o.X)/ (AsteroidWithLaser.Y - o.Y != 0 ? Math.Abs(AsteroidWithLaser.Y - o.Y) : .1)).ToList();
+                            if (posTargetList.Count() < 200 - Destoryed)
+                            {
+                                foreach (Asteroid posAsters in posTargetList)
+                                {
+                                    var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAsters.X && kvp.Value.Y == posAsters.Y));
+                                    if (item.Count() > 0)
+                                    {
+                                        Console.WriteLine("Bam " + Destoryed + " : " + item.First().Value.X + ", " + item.First().Value.Y);
+                                        AsteroidsLiving.Remove(item.First().Key);
+                                        Destoryed++;
+                                    }
+                                }
+                            }
+                            else // there are more items than the number we would destroy
+                            {
+                                foreach (Asteroid posAstersALot in posTargetList)
+                                {
+                                    var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAstersALot.X && kvp.Value.Y == posAstersALot.Y));
+                                    Console.WriteLine("Bam " + Destoryed + " : " + item.First().Value.X + ", " + item.First().Value.Y);
+                                    AsteroidsLiving.Remove(item.First().Key);
+                                    Destoryed++;
+                                    if (Destoryed == 200)
+                                    {
+                                        Console.WriteLine("CoordsLocatedForLastTarget: " + posAstersALot.X.ToString() + ", " + posAstersALot.Y.ToString());
+                                        Console.WriteLine("10b Bet winning asteroid: " + (posAstersALot.X * 100 + posAstersALot.Y).ToString());
+                                    }
+                                }
+                            }
+                        }
+                        //UpperLeftCords
+                        if (Detected.Any(posTarget => posTarget.X < AsteroidWithLaser.X && posTarget.Y <= AsteroidWithLaser.Y))
+                        {
+                            var posTargetList = Detected.Where(posTarget => posTarget.X < AsteroidWithLaser.X && posTarget.Y <= AsteroidWithLaser.Y).ToList();
+                            posTargetList = posTargetList.OrderBy(o => Math.Abs(AsteroidWithLaser.X - o.X)
+                            /(AsteroidWithLaser.Y - o.Y != 0 ? Math.Abs(AsteroidWithLaser.Y - o.Y) : .1)
+                            ).ToList();
+                            posTargetList.Reverse();
+                            if (posTargetList.Count() < 200 - Destoryed)
+                            {
+                                foreach (Asteroid posAsters in posTargetList)
+                                {
+                                    var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAsters.X && kvp.Value.Y == posAsters.Y));
+                                    if (item.Count() > 0)
+                                    {
+                                        Console.WriteLine("Bam " + Destoryed + " : " + item.First().Value.X + ", " + item.First().Value.Y);
+                                        AsteroidsLiving.Remove(item.First().Key);
+                                        Destoryed++;
+                                    }
+                                }
+                            }
+                            else // there are more items than the number we would destroy
+                            {
+                                //make ordered because i'm not lazy any more
+                                foreach (Asteroid posAstersALot in posTargetList)
+                                {
+                                    var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAstersALot.X && kvp.Value.Y == posAstersALot.Y));
+                                    Console.WriteLine("Bam " + Destoryed + " : " + item.First().Value.X + ", " + item.First().Value.Y);
+                                    AsteroidsLiving.Remove(item.First().Key);
+                                    Destoryed++;
+                                    if (Destoryed == 200)
+                                    {
+                                        Console.WriteLine("CoordsLocatedForLastTarget: " + posAstersALot.X.ToString() + ", " + posAstersALot.Y.ToString());
+                                        Console.WriteLine("10b Bet winning asteroid: " + (posAstersALot.X * 100 + posAstersALot.Y).ToString());
+                                    }
+                                }
+                            }
 
+                        //var item in AsteroidsLiving.Where(kvp => kvp.Value == DustAsteroid)
                     }
                 }
             }
@@ -599,6 +807,12 @@ namespace Advent8_12Solver
         {
             // using LINQ:
             return args.Aggregate((gcd, arg) => GCD(gcd, arg));
+        }
+        private static int ManhattanDistance(int x1, int y1, int x2, int y2)
+        {
+            int distance = 0;
+            distance = Math.Abs(x1 - x2) + Math.Abs(y1 - y2);
+            return distance;
         }
     }
 }
