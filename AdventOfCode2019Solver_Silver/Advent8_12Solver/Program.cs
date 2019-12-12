@@ -516,6 +516,165 @@ namespace Advent8_12Solver
                     }
                 }
             }
+            else if (key.Contains("11a"))
+            {
+                string[] Advent11Values = Properties.Resources.Advent11.Split(',');
+                Dictionary<long, long> DictionaryInstructions = new Dictionary<long, long>();
+                for (int i = 0; i < Advent11Values.Length; i++)
+                {
+                    DictionaryInstructions[i] = long.Parse(Advent11Values[i]);
+                }
+                // Now take a robot and feed it instruction outputs
+                Robot EmergencyPaintingBot = new Robot();
+                EmergencyPaintingBot.Location.Color = 0;
+                long index = 0;
+                long relativeBase = 0;
+                bool Running = true;
+                while(Running)
+                {
+                    List<long> BrainOutputs = Advent11OpCodeReader(DictionaryInstructions, EmergencyPaintingBot.Location.Color, index, relativeBase);
+                    if(BrainOutputs.Count > 3) //Has three outputs
+                    {
+                        Console.WriteLine("Painting Panel (" + EmergencyPaintingBot.Location.X.ToString() + ", " + EmergencyPaintingBot.Location.Y.ToString() + ") Color: " + (BrainOutputs[0] == 0 ? "Black" : "White"));
+                        EmergencyPaintingBot.Location.Color = Convert.ToInt32(BrainOutputs[0]);
+                        EmergencyPaintingBot.Forward(Convert.ToInt32(BrainOutputs[1]));
+                        index = BrainOutputs[2];
+                        relativeBase = BrainOutputs[3];
+                    }
+                    else
+                    {
+                        Running = false;
+                    }
+                }
+                Console.WriteLine("Robot is Finished and done 10a");
+
+            }
+            else if (key.Contains("11b"))
+            {
+                string[] Advent11Values = Properties.Resources.Advent11.Split(',');
+                Dictionary<long, long> DictionaryInstructions = new Dictionary<long, long>();
+                for (int i = 0; i < Advent11Values.Length; i++)
+                {
+                    DictionaryInstructions[i] = long.Parse(Advent11Values[i]);
+                }
+                // Now take a robot and feed it instruction outputs
+                Robot EmergencyPaintingBot = new Robot();
+                EmergencyPaintingBot.Location.Color = 1;
+                long index = 0;
+                bool Running = true;
+                long relativeBase = 0;
+                while (Running)
+                {
+                    List<long> BrainOutputs = Advent11OpCodeReader(DictionaryInstructions, EmergencyPaintingBot.Location.Color, index, relativeBase);
+                    if (BrainOutputs.Count > 3) //Has three outputs
+                    {
+                        Console.WriteLine("Painting Panel (" + EmergencyPaintingBot.Location.X.ToString() + ", " + EmergencyPaintingBot.Location.Y.ToString() + ") Color: " + (BrainOutputs[0] == 0 ? "Black" : "White"));
+                        EmergencyPaintingBot.Location.Color = Convert.ToInt32(BrainOutputs[0]);
+                        EmergencyPaintingBot.Forward(Convert.ToInt32(BrainOutputs[1]));
+                        index = BrainOutputs[2];
+                        relativeBase = BrainOutputs[3];
+                    }
+                    else
+                    {
+                        Running = false;
+                    }
+                }
+                if(!EmergencyPaintingBot.UniquePanels.Any(kvp => kvp.Value.X == EmergencyPaintingBot.Location.X && kvp.Value.Y == EmergencyPaintingBot.Location.Y))
+                {
+                    EmergencyPaintingBot.UniquePanels[EmergencyPaintingBot.UniquePanels.Count] = new Panel(EmergencyPaintingBot.Location);
+                }
+                // Brute Force Static Write
+                for (int y = 0; y >= -5; y--)
+                {
+                    for (int x = 0; x <= 40; x++)
+                    {
+                        if (EmergencyPaintingBot.UniquePanels.Any(kvp => kvp.Value.X == x && kvp.Value.Y == y))
+                        {
+                            Console.Write(EmergencyPaintingBot.UniquePanels.Where(kvp => kvp.Value.X == x && kvp.Value.Y == y).First().Value.Color);
+                        }
+                        else
+                        {
+                            Console.Write(" ");
+                        }
+                    }
+                    Console.Write(Environment.NewLine);
+                }
+                Console.WriteLine("Robot is Finished and done 10b");
+
+            }
+            else if (key.Contains("Test1"))
+            {
+                Robot EmergencyPaintingBot = new Robot();
+                Console.WriteLine(EmergencyPaintingBot.Location.X + ", " + EmergencyPaintingBot.Location.Y);
+                EmergencyPaintingBot.Location.Color = 1;
+                EmergencyPaintingBot.Forward(1);
+                Console.WriteLine(EmergencyPaintingBot.Location.X + ", " + EmergencyPaintingBot.Location.Y);
+                EmergencyPaintingBot.Location.Color = 1;
+                EmergencyPaintingBot.Forward(1);
+                Console.WriteLine(EmergencyPaintingBot.Location.X + ", " + EmergencyPaintingBot.Location.Y);
+                EmergencyPaintingBot.Location.Color = 1;
+                EmergencyPaintingBot.Forward(1);
+                Console.WriteLine(EmergencyPaintingBot.Location.X + ", " + EmergencyPaintingBot.Location.Y);
+                EmergencyPaintingBot.Location.Color = 1;
+                EmergencyPaintingBot.Forward(1);
+                Console.WriteLine(EmergencyPaintingBot.Location.X + ", " + EmergencyPaintingBot.Location.Y);
+                EmergencyPaintingBot.Location.Color = 1;
+                EmergencyPaintingBot.Forward(1);
+                Console.WriteLine(EmergencyPaintingBot.Location.X + ", " + EmergencyPaintingBot.Location.Y);
+                EmergencyPaintingBot.Location.Color = 1;
+                EmergencyPaintingBot.Forward(1);
+                Console.WriteLine(EmergencyPaintingBot.Location.X + ", " + EmergencyPaintingBot.Location.Y);
+                EmergencyPaintingBot.Location.Color = 1;
+                EmergencyPaintingBot.Forward(1);
+                Console.WriteLine(EmergencyPaintingBot.Location.X + ", " + EmergencyPaintingBot.Location.Y);
+                EmergencyPaintingBot.Location.Color = 1;
+                EmergencyPaintingBot.Forward(1);
+                Console.WriteLine(EmergencyPaintingBot.Location.X + ", " + EmergencyPaintingBot.Location.Y);
+                EmergencyPaintingBot.Location.Color = 1;
+                EmergencyPaintingBot.Forward(1);
+                Console.WriteLine(EmergencyPaintingBot.Location.X + ", " + EmergencyPaintingBot.Location.Y);
+                EmergencyPaintingBot.Location.Color = 1;
+                EmergencyPaintingBot.Forward(1);
+                Console.WriteLine(EmergencyPaintingBot.Location.X + ", " + EmergencyPaintingBot.Location.Y);
+                EmergencyPaintingBot.Location.Color = 1;
+                EmergencyPaintingBot.Forward(1);
+                Console.WriteLine(EmergencyPaintingBot.Location.X + ", " + EmergencyPaintingBot.Location.Y);
+                EmergencyPaintingBot.Location.Color = 1;
+                EmergencyPaintingBot.Forward(1);
+                Console.WriteLine(EmergencyPaintingBot.Location.X + ", " + EmergencyPaintingBot.Location.Y);
+            }
+            else if (key.Contains("Test2"))
+            {
+                string[] Advent11Values = Properties.Resources.Advent11.Split(',');
+                Dictionary<long, long> DictionaryInstructions = new Dictionary<long, long>();
+                for (int i = 0; i < Advent11Values.Length; i++)
+                {
+                    DictionaryInstructions[i] = long.Parse(Advent11Values[i]);
+                }
+                long index = 0;
+                List<long> inputs = new List<long>();//0, 0, 0, 0, 1, 0, 0);
+                inputs.Add(0);
+                inputs.Add(0);
+                inputs.Add(0);
+                inputs.Add(0);
+                inputs.Add(1);
+                inputs.Add(0);
+                inputs.Add(0);
+                foreach(long input in inputs)
+                {
+                    List<long> outputs = new List<long>();
+                    outputs = Advent11OpCodeReader(DictionaryInstructions,input,index);
+                    if(outputs.Count > 0)
+                    {
+                        index = outputs[2];
+                        Console.WriteLine("output 1: " + outputs[0] + " output 2: " + outputs[1] + " index: " + outputs[2]);
+                    }
+                    else
+                    { 
+                    
+                    }
+                }
+            }
             else
             {
                 Console.WriteLine("No Input");
@@ -523,7 +682,102 @@ namespace Advent8_12Solver
             Console.WriteLine("Finished");
             Console.ReadLine();
         }
+        private static List<long> Advent11OpCodeReader(Dictionary<long, long> TheCode, long input1, long input2 = 0, long input3 = 0)
+        {
+            long i = input2;
+            long result = 0;
+            bool flag = true;
+            long relativeBase = input3;
+            List<long> ListOfOutputs = new List<long>();
+            while ((LastTwoDigitHelperAdvent5(TheCode[i]) == 1
+                || LastTwoDigitHelperAdvent5(TheCode[i]) == 2
+                || LastTwoDigitHelperAdvent5(TheCode[i]) == 3
+                || LastTwoDigitHelperAdvent5(TheCode[i]) == 4
+                || LastTwoDigitHelperAdvent5(TheCode[i]) == 5
+                || LastTwoDigitHelperAdvent5(TheCode[i]) == 6
+                || LastTwoDigitHelperAdvent5(TheCode[i]) == 7
+                || LastTwoDigitHelperAdvent5(TheCode[i]) == 8
+                || LastTwoDigitHelperAdvent5(TheCode[i]) == 9)
+                && (LastTwoDigitHelperAdvent5(TheCode[i]) != 99))
+            {
+                long OpCode = LastTwoDigitHelperAdvent5(TheCode[i]);
+                string LocCode = First3DigitHelperAdvent5(TheCode[i]).Substring(0, 3);
+                if (OpCode == 1)
+                {
+                    WriteModeAdvent9(TheCode, LocCode, i + 3, 0, ReadModeAdvent9(TheCode, LocCode, i + 1, 2, relativeBase) + ReadModeAdvent9(TheCode, LocCode, i + 2, 1, relativeBase), relativeBase);
+                    i += 4;
+                }
+                else if (OpCode == 2)
+                {
+                    WriteModeAdvent9(TheCode, LocCode, i + 3, 0, ReadModeAdvent9(TheCode, LocCode, i + 1, 2, relativeBase) * ReadModeAdvent9(TheCode, LocCode, i + 2, 1, relativeBase), relativeBase);
+                    i += 4;
+                }
+                else if (OpCode == 3)
+                {
+                    // need to input
+                    if (flag)
+                    {
+                        WriteModeAdvent9(TheCode, LocCode, i + 1, 2, input1, relativeBase);
+                        flag = false;
+                    }
+                    else
+                    {
+                        WriteModeAdvent9(TheCode, LocCode, i + 1, 2, input2, relativeBase);
+                    }
+                    i += 2;
+                }
+                else if (OpCode == 4)
+                {
+                    // need to output
 
+                    ListOfOutputs.Add(ReadModeAdvent9(TheCode, LocCode, i + 1, 2, relativeBase));
+                    result = ReadModeAdvent9(TheCode, LocCode, i + 1, 2, relativeBase);
+                    i += 2;
+                    if(ListOfOutputs.Count > 1)
+                    {
+                        ListOfOutputs.Add(i);
+                        ListOfOutputs.Add(relativeBase);
+                        break;
+                    }
+                }
+                else if (OpCode == 5)
+                {
+                    i = ReadModeAdvent9(TheCode, LocCode, i + 1, 2, relativeBase) != 0 ? ReadModeAdvent9(TheCode, LocCode, i + 2, 1, relativeBase) : i + 3;
+                }
+                else if (OpCode == 6)
+                {
+                    i = ReadModeAdvent9(TheCode, LocCode, i + 1, 2, relativeBase) == 0 ? ReadModeAdvent9(TheCode, LocCode, i + 2, 1, relativeBase) : i + 3;
+                }
+                else if (OpCode == 7)//sets things to 1 or 0 if compare is lessthan
+                {
+                    WriteModeAdvent9(TheCode, LocCode, i + 3, 0, ReadModeAdvent9(TheCode, LocCode, i + 1, 2, relativeBase) < ReadModeAdvent9(TheCode, LocCode, i + 2, 1, relativeBase) ? 1 : 0, relativeBase);
+                    i += 4;
+                }
+                else if (OpCode == 8)//sets things to 1 or 0 if  
+                {
+                    WriteModeAdvent9(TheCode, LocCode, i + 3, 0, ReadModeAdvent9(TheCode, LocCode, i + 1, 2, relativeBase) == ReadModeAdvent9(TheCode, LocCode, i + 2, 1, relativeBase) ? 1 : 0, relativeBase);
+                    i += 4;
+                }
+                else if (OpCode == 9)// sets relativebase
+                {
+                    relativeBase = relativeBase + ReadModeAdvent9(TheCode, LocCode, i + 1, 2, relativeBase);
+                    i += 2;
+                }
+                else
+                {
+                    Console.WriteLine("Instruction at was odd for i:" + i);
+                }
+            }
+            if (LastTwoDigitHelperAdvent5(TheCode[i]) == 99 && ListOfOutputs.Count > 0)
+            {
+                Console.WriteLine("Robot Processed Instruction");
+                //foreach (long test in ListOfOutputs)
+                //{
+                //    Console.WriteLine(test);
+                //}
+            }
+            return ListOfOutputs;
+        }
         private static long Advent9OpCodeReader(Dictionary<long, long> TheCode, long input1, long input2 = 0)
         {
             long i = 0;
@@ -761,7 +1015,141 @@ namespace Advent8_12Solver
                 }
             }
         }
+        private class Robot
+        {
+            public int Direction = 0;// 0 = north, 1 = east, 2 = South, 3 = West
+            public Dictionary<int, Panel> UniquePanels = new Dictionary<int, Panel>();
+            public int DistanceTraveled = 0;
+            public Panel Location = new Panel(0, 0, 0);
+            public List<Panel> PathTaken = new List<Panel>();
 
+            public Robot()
+            {
+                // nothing here
+            }
+
+            public void Forward(int turn)
+            {
+                Turn(turn);
+                PathTaken.Add(Location);               
+                int moveX = 0;
+                int moveY = 0;
+                if(Direction == 0)
+                {
+                    moveY = 1;
+                }
+                else if(Direction == 1)
+                {
+                    moveX = 1;
+                }
+                else if(Direction == 2)
+                {
+                    moveY = -1;
+                }
+                else if(Direction == 3)
+                {
+                    moveX = -1;
+                }
+                if (!UniquePanels.Any(KVP => KVP.Value.X == this.Location.X && KVP.Value.Y == this.Location.Y)) //Add the unique panel
+                {
+                    UniquePanels.Add(DistanceTraveled, new Panel(Location));
+                }
+                else if(UniquePanels.Any(KVP => KVP.Value.X == this.Location.X && KVP.Value.Y == this.Location.Y)) //Update the Panel
+                {
+                    UniquePanels[UniquePanels.Where(KVP => KVP.Value.X == this.Location.X && KVP.Value.Y == this.Location.Y).First().Key] = new Panel(Location);
+                }
+                DistanceTraveled++;
+                if (UniquePanels.Any(KVP => KVP.Value.X == (this.Location.X+moveX) && KVP.Value.Y == (this.Location.Y+moveY)))
+                {
+                    Location = new Panel(UniquePanels.Where(KVP => KVP.Value.X == this.Location.X + moveX && KVP.Value.Y == this.Location.Y + moveY).First().Value);
+                }
+                else if((!(UniquePanels.Any(KVP => KVP.Value.X == (this.Location.X + moveX) && KVP.Value.Y == (this.Location.Y + moveY)))))
+                {
+                    Location = new Panel(Location.X + moveX, Location.Y + moveY, 0);
+                }
+                else
+                {
+                    //Consult the dev
+                }
+
+            }
+
+            public void Turn(int turn)
+            {
+                // North to West or East
+                if(Direction == 0)
+                {
+                    if(turn == 0)
+                    {
+                        Direction = 3; // West
+                    }
+                    else if(turn == 1)
+                    {
+                        Direction = 1; // East
+                    }
+                }
+                // East
+                else if(Direction == 1)
+                {
+                    if (turn == 0)
+                    {
+                        Direction = 0;
+                    }
+                    else if(turn == 1)
+                    {
+                        Direction = 2;
+                    }
+                }
+                // South
+                else if (Direction == 2)
+                {
+                    if (turn == 0)
+                    {
+                        Direction = 1;
+                    }
+                    else if(turn == 1)
+                    {
+                        Direction = 3;
+                    }
+                }
+                // West
+                else if (Direction == 3)
+                {
+                    if (turn == 0)
+                    {
+                        Direction = 2;
+                    }
+                    else if(turn == 1)
+                    {
+                        Direction = 0;
+                    }
+                }
+                else if(turn > 1 || turn < 0)
+                {
+
+                }
+            }
+        }
+        private class Panel
+        {
+            public int X = 0;
+            public int Y = 0;
+            public int Color = 0;
+
+            public Panel(int x, int y, int Color)
+            {
+                this.X = x;
+                this.Y = y;
+                this.Color = 0;
+            }
+
+            public Panel(Panel Old)
+            {
+                this.X = Old.X;
+                this.Y = Old.Y;
+                this.Color = Old.Color;
+            }
+        }
         private class Asteroid
         {
             public int X = 0;
@@ -786,7 +1174,6 @@ namespace Advent8_12Solver
         //return new string (chars);
         //}
         //
-
         private static void Simplify(int[] numbers)
         {
             int gcd = GCD(numbers);
