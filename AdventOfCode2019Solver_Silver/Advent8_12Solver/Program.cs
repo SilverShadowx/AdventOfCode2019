@@ -602,6 +602,112 @@ namespace Advent8_12Solver
                 Console.WriteLine("Robot is Finished and done 10b");
 
             }
+            else if (key.Contains("12a"))
+            {
+                //12a inputs
+                //Moon Tharcia = new Moon("Tharcia", 7, 10, 17, 0, 0, 0);
+                //Moon Valentia = new Moon("Valentia", -2, 7, 0, 0, 0, 0);
+                //Moon Hoshido = new Moon("Hoshido", 12, 5, 12, 0, 0, 0);
+                //Moon Noir = new Moon("Noir", 5, -8, 6, 0, 0, 0);
+
+                //12a Test
+                //Moon Tharcia = new Moon("Tharcia", -8, -10, 0, 0, 0, 0);
+                //Moon Valentia = new Moon("Valentia", 5, 5, 10, 0, 0, 0);
+                //Moon Hoshido = new Moon("Hoshido", 2, -7, 3, 0, 0, 0);
+                //Moon Noir = new Moon("Noir", 9, -8, -3, 0, 0, 0);
+
+                Moon Tharcia = new Moon("Tharcia", -1, -0, 2, 0, 0, 0);
+                Moon Valentia = new Moon("Valentia", 2, -10, -7, 0, 0, 0);
+                Moon Hoshido = new Moon("Hoshido", 4, -8, 8, 0, 0, 0);
+                Moon Noir = new Moon("Noir", 3, 5, -1, 0, 0, 0);
+                long timeSpan = 0;
+                while(timeSpan != 11)
+                {
+                    Console.WriteLine("Current Step: " + timeSpan);
+                    Console.WriteLine("Tharcia Pos; " + Tharcia.xPos + " " + Tharcia.yPos + " " + Tharcia.zPos);
+                    Console.WriteLine("Tharcia Vel; " + Tharcia.xVel + " " + Tharcia.yVel + " " + Tharcia.zVel);
+                    Console.WriteLine("Valentia Pos; " + Valentia.xPos + " " + Valentia.yPos + " " + Valentia.zPos);
+                    Console.WriteLine("Valentia Vel; " + Valentia.xVel + " " + Valentia.yVel + " " + Valentia.zVel);
+                    Console.WriteLine("Hoshido Pos; " + Hoshido.xPos + " " + Hoshido.yPos + " " + Hoshido.zPos);
+                    Console.WriteLine("Hoshido Vel; " + Hoshido.xVel + " " + Hoshido.yVel + " " + Hoshido.zVel);
+                    Console.WriteLine("Noir Pos; " + Noir.xPos + " " + Noir.yPos + " " + Noir.zPos);
+                    Console.WriteLine("Noir Vel; " + Noir.xVel + " " + Noir.yVel + " " + Noir.zVel);
+                    Console.WriteLine("__________________________________");
+                    Tharcia.CalculateVelocity(Valentia);
+                    Tharcia.CalculateVelocity(Hoshido);
+                    Tharcia.CalculateVelocity(Noir);
+                    Valentia.CalculateVelocity(Hoshido);
+                    Valentia.CalculateVelocity(Noir);
+                    Noir.CalculateVelocity(Hoshido);
+                    Tharcia.MoveMoon();
+                    Valentia.MoveMoon();
+                    Hoshido.MoveMoon();
+                    Noir.MoveMoon();
+                    //Console.WriteLine("Tharcia : Potential Energy: " + Tharcia.GetPotentialEnergy() + " Tharcia : Kinetic Energy: " + Tharcia.GetKineticEnergy());
+                    //Console.WriteLine("Valentia : Potential Energy: " + Valentia.GetPotentialEnergy() + " Valentia : Kinetic Energy: " + Valentia.GetKineticEnergy());
+                    //Console.WriteLine("Hoshido : Potential Energy: " + Hoshido.GetPotentialEnergy() + " Hoshido : Kinetic Energy: " + Hoshido.GetKineticEnergy());
+                    //Console.WriteLine("Noir : Potential Energy: " + Noir.GetPotentialEnergy() + " Noir : Kinetic Energy: " + Noir.GetKineticEnergy());
+                    timeSpan++;
+                }
+                Console.WriteLine("Day 12a: Total Energy: " + (Tharcia.GetEnergy() + Valentia.GetEnergy() + Hoshido.GetEnergy() + Noir.GetEnergy()));
+            }
+            else if (key.Contains("12b"))
+            {
+                //12b inputs
+                Moon Tharcia = new Moon("Tharcia", 7, 10, 17, 0, 0, 0);
+                Moon Valentia = new Moon("Valentia", -2, 7, 0, 0, 0, 0);
+                Moon Hoshido = new Moon("Hoshido", 12, 5, 12, 0, 0, 0);
+                Moon Noir = new Moon("Noir", 5, -8, 6, 0, 0, 0);
+
+                //12b Test
+                //Moon Tharcia = new Moon("Tharcia", -8, -10, 0, 0, 0, 0);
+                //Moon Valentia = new Moon("Valentia", 5, 5, 10, 0, 0, 0);
+                //Moon Hoshido = new Moon("Hoshido", 2, -7, 3, 0, 0, 0);
+                //Moon Noir = new Moon("Noir", 9, -8, -3, 0, 0, 0);
+
+                //12b Test2
+                //Moon Tharcia = new Moon("Tharcia", -1, -0, 2, 0, 0, 0);
+                //Moon Valentia = new Moon("Valentia", 2, -10, -7, 0, 0, 0);
+                //Moon Hoshido = new Moon("Hoshido", 4, -8, 8, 0, 0, 0);
+                //Moon Noir = new Moon("Noir", 3, 5, -1, 0, 0, 0);
+                long timeSpan = 0;
+                Dictionary<long, List<Moon>> Universe = new Dictionary<long, List<Moon>>();
+                bool Repeat = false;
+                while (!Repeat && timeSpan < 4686774924)
+                {
+                    List<Moon> Moons = new List<Moon>();
+                    Tharcia.CalculateVelocity(Valentia);
+                    Tharcia.CalculateVelocity(Hoshido);
+                    Tharcia.CalculateVelocity(Noir);
+                    Valentia.CalculateVelocity(Hoshido);
+                    Valentia.CalculateVelocity(Noir);
+                    Noir.CalculateVelocity(Hoshido);
+
+                    Tharcia.MoveMoon();
+                    Valentia.MoveMoon();
+                    Hoshido.MoveMoon();
+                    Noir.MoveMoon();
+                    //Console.WriteLine("Tharcia : Potential Energy: " + Tharcia.GetPotentialEnergy() + " Tharcia : Kinetic Energy: " + Tharcia.GetKineticEnergy());
+                    //Console.WriteLine("Valentia : Potential Energy: " + Valentia.GetPotentialEnergy() + " Valentia : Kinetic Energy: " + Valentia.GetKineticEnergy());
+                    //Console.WriteLine("Hoshido : Potential Energy: " + Hoshido.GetPotentialEnergy() + " Hoshido : Kinetic Energy: " + Hoshido.GetKineticEnergy());
+                    //Console.WriteLine("Noir : Potential Energy: " + Noir.GetPotentialEnergy() + " Noir : Kinetic Energy: " + Noir.GetKineticEnergy());
+                    Moons.Add(new Moon(Tharcia));
+                    Moons.Add(new Moon(Valentia));
+                    Moons.Add(new Moon(Hoshido));
+                    Moons.Add(new Moon(Noir));
+                    timeSpan = timeSpan + 1;
+                    if (Universe.Where(kvp => CompareMoon(kvp.Value[0], Tharcia) && CompareMoon(kvp.Value[1], Valentia) && CompareMoon(kvp.Value[2], Hoshido) && CompareMoon(kvp.Value[3], Noir)).Count() > 0)
+                    {
+                        Repeat = true;
+                    }
+                    else
+                    {
+                        Universe[timeSpan] = new List<Moon>(Moons);
+                    }                   
+                }
+                Console.WriteLine("Day 12b: Total Energy: " + (Tharcia.GetEnergy() + Valentia.GetEnergy() + Hoshido.GetEnergy() + Noir.GetEnergy()));
+                Console.WriteLine("Total Time: " + (timeSpan-1));
+            }
             else if (key.Contains("Test1"))
             {
                 Robot EmergencyPaintingBot = new Robot();
@@ -681,6 +787,10 @@ namespace Advent8_12Solver
             }
             Console.WriteLine("Finished");
             Console.ReadLine();
+        }
+        public static bool CompareMoon(Moon moon1, Moon moon2)
+        {
+            return (moon1.xPos == moon2.xPos) && (moon1.yPos == moon2.yPos) && (moon1.zPos == moon2.zPos) && (moon1.xVel == moon2.xVel) && (moon1.yVel == moon2.yVel) && (moon1.zVel == moon2.zVel);
         }
         private static List<long> Advent11OpCodeReader(Dictionary<long, long> TheCode, long input1, long input2 = 0, long input3 = 0)
         {
@@ -1159,6 +1269,93 @@ namespace Advent8_12Solver
             {
                 this.X = x;
                 this.Y = y;
+            }
+        }
+        public class Moon
+        {
+            public string Name;
+            public int xPos;
+            public int yPos;
+            public int zPos;
+            public int xVel;
+            public int yVel;
+            public int zVel;
+
+            public Moon (Moon moon)
+            {
+                this.Name = moon.Name;
+                this.xPos = moon.xPos;
+                this.yPos = moon.yPos;
+                this.zPos = moon.zPos;
+                this.xVel = moon.xVel;
+                this.yVel = moon.yVel;
+                this.zVel = moon.zVel;
+            }
+            public Moon (string name, int x, int y, int z, int xV, int yV, int zV)
+            {
+                this.Name = name;
+                this.xPos = x;
+                this.yPos = y;
+                this.zPos = z;
+                this.xVel = xV;
+                this.yVel = yV;
+                this.zVel = zV;
+            }
+
+            public void CalculateVelocity(Moon otherMoon)
+            {
+                if(this.xPos > otherMoon.xPos)
+                {
+                    this.xVel--;
+                    otherMoon.xVel++;
+                }
+                else if(this.xPos < otherMoon.xPos)
+                {
+                    this.xVel++;
+                    otherMoon.xVel--;
+                }
+                if(this.yPos > otherMoon.yPos)
+                {
+                    this.yVel--;
+                    otherMoon.yVel++;
+                }
+                else if (this.yPos < otherMoon.yPos)
+                {
+                    this.yVel++;
+                    otherMoon.yVel--;
+                }
+                if (this.zPos > otherMoon.zPos)
+                {
+                    this.zVel--;
+                    otherMoon.zVel++;
+                }
+                else if (this.zPos < otherMoon.zPos)
+                {
+                    this.zVel++;
+                    otherMoon.zVel--;
+                }
+            }
+
+            public void MoveMoon()
+            {
+                this.xPos += this.xVel;
+                this.yPos += this.yVel;
+                this.zPos += this.zVel;
+            }
+
+            public int GetPotentialEnergy()
+            {
+                return Math.Abs(this.xPos) + Math.Abs(this.yPos) + Math.Abs(this.zPos);
+            }
+
+            public int GetKineticEnergy()
+            {
+                return Math.Abs(this.xVel) + Math.Abs(this.yVel) + Math.Abs(this.zVel);
+            }
+
+            public int GetEnergy()
+            {
+                return GetPotentialEnergy() * GetKineticEnergy();
             }
         }
         //Stack Overflow function/methods borrowed
