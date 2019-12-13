@@ -654,10 +654,10 @@ namespace Advent8_12Solver
             else if (key.Contains("12b"))
             {
                 //12b inputs
-                Moon Tharcia = new Moon("Tharcia", 7, 10, 17, 0, 0, 0);
-                Moon Valentia = new Moon("Valentia", -2, 7, 0, 0, 0, 0);
-                Moon Hoshido = new Moon("Hoshido", 12, 5, 12, 0, 0, 0);
-                Moon Noir = new Moon("Noir", 5, -8, 6, 0, 0, 0);
+                //Moon Tharcia = new Moon("Tharcia", 7, 10, 17, 0, 0, 0);
+                //Moon Valentia = new Moon("Valentia", -2, 7, 0, 0, 0, 0);
+                //Moon Hoshido = new Moon("Hoshido", 12, 5, 12, 0, 0, 0);
+                //Moon Noir = new Moon("Noir", 5, -8, 6, 0, 0, 0);
 
                 //12b Test
                 //Moon Tharcia = new Moon("Tharcia", -8, -10, 0, 0, 0, 0);
@@ -666,16 +666,16 @@ namespace Advent8_12Solver
                 //Moon Noir = new Moon("Noir", 9, -8, -3, 0, 0, 0);
 
                 //12b Test2
-                //Moon Tharcia = new Moon("Tharcia", -1, -0, 2, 0, 0, 0);
-                //Moon Valentia = new Moon("Valentia", 2, -10, -7, 0, 0, 0);
-                //Moon Hoshido = new Moon("Hoshido", 4, -8, 8, 0, 0, 0);
-                //Moon Noir = new Moon("Noir", 3, 5, -1, 0, 0, 0);
+                Moon Tharcia = new Moon("Tharcia", -1, -0, 2, 0, 0, 0);
+                Moon Valentia = new Moon("Valentia", 2, -10, -7, 0, 0, 0);
+                Moon Hoshido = new Moon("Hoshido", 4, -8, 8, 0, 0, 0);
+                Moon Noir = new Moon("Noir", 3, 5, -1, 0, 0, 0);
                 long timeSpan = 0;
-                Dictionary<long, List<Moon>> Universe = new Dictionary<long, List<Moon>>();
+                List<string> Universe = new List<string>();
                 bool Repeat = false;
-                while (!Repeat && timeSpan < 4686774924)
+                while (!Repeat && timeSpan < 4686774925)
                 {
-                    List<Moon> Moons = new List<Moon>();
+                    //List<Moon> Moons = new List<Moon>();
                     Tharcia.CalculateVelocity(Valentia);
                     Tharcia.CalculateVelocity(Hoshido);
                     Tharcia.CalculateVelocity(Noir);
@@ -691,18 +691,22 @@ namespace Advent8_12Solver
                     //Console.WriteLine("Valentia : Potential Energy: " + Valentia.GetPotentialEnergy() + " Valentia : Kinetic Energy: " + Valentia.GetKineticEnergy());
                     //Console.WriteLine("Hoshido : Potential Energy: " + Hoshido.GetPotentialEnergy() + " Hoshido : Kinetic Energy: " + Hoshido.GetKineticEnergy());
                     //Console.WriteLine("Noir : Potential Energy: " + Noir.GetPotentialEnergy() + " Noir : Kinetic Energy: " + Noir.GetKineticEnergy());
-                    Moons.Add(new Moon(Tharcia));
-                    Moons.Add(new Moon(Valentia));
-                    Moons.Add(new Moon(Hoshido));
-                    Moons.Add(new Moon(Noir));
+                    string UniverseState = Tharcia.GenerateState() + "|" + Valentia.GenerateState() + "|" + Hoshido.GenerateState() + "|" + Noir.GenerateState();
+                    //Moons.Add(new Moon(Tharcia));
+                    //Moons.Add(new Moon(Valentia));
+                    //Moons.Add(new Moon(Hoshido));
+                    //Moons.Add(new Moon(Noir));
                     timeSpan = timeSpan + 1;
-                    if (Universe.Where(kvp => CompareMoon(kvp.Value[0], Tharcia) && CompareMoon(kvp.Value[1], Valentia) && CompareMoon(kvp.Value[2], Hoshido) && CompareMoon(kvp.Value[3], Noir)).Count() > 0)
+                    var Repeated = from state in Universe.AsParallel()
+                                   where state == UniverseState
+                                   select state;
+                    if (Repeated.Count() > 0)
                     {
                         Repeat = true;
                     }
                     else
                     {
-                        Universe[timeSpan] = new List<Moon>(Moons);
+                        Universe.Add(UniverseState);
                     }                   
                 }
                 Console.WriteLine("Day 12b: Total Energy: " + (Tharcia.GetEnergy() + Valentia.GetEnergy() + Hoshido.GetEnergy() + Noir.GetEnergy()));
@@ -1300,6 +1304,10 @@ namespace Advent8_12Solver
                 this.xVel = xV;
                 this.yVel = yV;
                 this.zVel = zV;
+            }
+            public string GenerateState()
+            {
+                return Name + "|" + xPos + "|" + yPos + "|" + zPos + "|" + xVel + "|" + yVel + "|" + zVel + "|";
             }
 
             public void CalculateVelocity(Moon otherMoon)
