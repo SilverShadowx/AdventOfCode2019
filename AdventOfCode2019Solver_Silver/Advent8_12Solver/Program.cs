@@ -238,7 +238,7 @@ namespace Advent8_12Solver
                 }
                 //int[] intArray = { Math.Abs(-4), 8 };
                 //Simplify(intArray);
-                Console.WriteLine("Exiting Day 10a Coordinates found: " + Coordinates + " With Number of Visible Asteroids." + HighestCount);               
+                Console.WriteLine("Exiting Day 10a Coordinates found: " + Coordinates + " With Number of Visible Asteroids." + HighestCount);
             }
             else if (key.Contains("10b"))
             {
@@ -280,7 +280,7 @@ namespace Advent8_12Solver
                 {
                     List<Asteroid> Detected = new List<Asteroid>();
                     List<Asteroid> NotDetected = new List<Asteroid>();
-                    Dictionary<int,string> AsteroidsLineOfSight = new Dictionary<int, string>();
+                    Dictionary<int, string> AsteroidsLineOfSight = new Dictionary<int, string>();
                     // remove Asteroids in Asteroid living based on those detected
                     int numberDetect = 0;
                     foreach (KeyValuePair<int, Asteroid> GibbsFreeEnergy in AsteroidsLiving)
@@ -295,7 +295,7 @@ namespace Advent8_12Solver
                         {
                             if (!(AsteroidsLineOfSight.ContainsValue(String.Join(",", RunRise.Select(p => p.ToString()).ToArray()))) && !NegativeY && !NegativeX)
                             {
-                                AsteroidsLineOfSight[numberDetect]  = (String.Join(",", RunRise.Select(p => p.ToString()).ToArray()));
+                                AsteroidsLineOfSight[numberDetect] = (String.Join(",", RunRise.Select(p => p.ToString()).ToArray()));
                                 Detected.Add(GibbsFreeEnergy.Value);
                                 numberDetect++;
                             }
@@ -365,152 +365,152 @@ namespace Advent8_12Solver
                                     Detected[otherAster.Key] = GibbsFreeEnergy.Value;
                                 }
                             }
-                        }     
-                        
+                        }
+
                     }
                     //comapare them
                     //Console.WriteLine("Deleting");
                     NotDestoryed = AsteroidsLiving.Count > 0;
-                        if (Detected.Any(posTarget => posTarget.X >= AsteroidWithLaser.X && posTarget.Y < AsteroidWithLaser.Y))
+                    if (Detected.Any(posTarget => posTarget.X >= AsteroidWithLaser.X && posTarget.Y < AsteroidWithLaser.Y))
+                    {
+                        var posTargetList = Detected.Where(posTarget => posTarget.X >= AsteroidWithLaser.X && posTarget.Y < AsteroidWithLaser.Y).ToList();
+                        posTargetList = posTargetList.OrderBy(o => Math.Abs(AsteroidWithLaser.X - o.X) / (AsteroidWithLaser.Y - o.Y != 0 ? Math.Abs(AsteroidWithLaser.Y - o.Y) : .1)).ToList();
+                        if (posTargetList.Count() < 200 - Destoryed)
                         {
-                            var posTargetList = Detected.Where(posTarget => posTarget.X >= AsteroidWithLaser.X && posTarget.Y < AsteroidWithLaser.Y).ToList();
-                            posTargetList = posTargetList.OrderBy(o => Math.Abs(AsteroidWithLaser.X - o.X) / (AsteroidWithLaser.Y - o.Y != 0 ? Math.Abs(AsteroidWithLaser.Y - o.Y) : .1)).ToList();
-                            if (posTargetList.Count() < 200 - Destoryed)
+                            foreach (Asteroid posAsters in posTargetList)
                             {
-                                foreach (Asteroid posAsters in posTargetList)
+                                var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAsters.X && kvp.Value.Y == posAsters.Y));
+                                if (item.Count() > 0)
                                 {
-                                    var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAsters.X && kvp.Value.Y == posAsters.Y));
-                                    if (item.Count() > 0)
-                                    {
-                                        Console.WriteLine("Bam " + Destoryed + " : " + item.First().Value.X + ", " + item.First().Value.Y);
-                                        AsteroidsLiving.Remove(item.First().Key);
-                                        Destoryed++;
-                                    }
-                                }
-                            }
-                            else // there are more items than the number we would destroy
-                            {
-                                foreach (Asteroid posAstersALot in posTargetList)
-                                {
-                                    var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAstersALot.X && kvp.Value.Y == posAstersALot.Y));
                                     Console.WriteLine("Bam " + Destoryed + " : " + item.First().Value.X + ", " + item.First().Value.Y);
                                     AsteroidsLiving.Remove(item.First().Key);
                                     Destoryed++;
-                                    if (Destoryed == 200)
-                                    {
-                                        Console.WriteLine("CoordsLocatedForLastTarget: " + posAstersALot.X.ToString() + ", " + posAstersALot.Y.ToString());
-                                        Console.WriteLine("10b Bet winning asteroid: " + (posAstersALot.X * 100 + posAstersALot.Y).ToString());
-                                    }
                                 }
                             }
                         }
-                        //LowerRightCords
-                        if (Detected.Any(posTarget => posTarget.X > AsteroidWithLaser.X && posTarget.Y >= AsteroidWithLaser.Y))
+                        else // there are more items than the number we would destroy
                         {
-                            var posTargetList = Detected.Where(posTarget => posTarget.X > AsteroidWithLaser.X && posTarget.Y >= AsteroidWithLaser.Y).ToList();
-                            posTargetList = posTargetList.OrderBy(o => 
-                            Math.Abs(AsteroidWithLaser.X - o.X)/ (AsteroidWithLaser.Y - o.Y != 0 ? AsteroidWithLaser.Y - o.Y : -.1)).ToList();
-                            if (posTargetList.Count() < 200 - Destoryed)
+                            foreach (Asteroid posAstersALot in posTargetList)
                             {
-                                foreach (Asteroid posAsters in posTargetList)
+                                var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAstersALot.X && kvp.Value.Y == posAstersALot.Y));
+                                Console.WriteLine("Bam " + Destoryed + " : " + item.First().Value.X + ", " + item.First().Value.Y);
+                                AsteroidsLiving.Remove(item.First().Key);
+                                Destoryed++;
+                                if (Destoryed == 200)
                                 {
-                                    var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAsters.X && kvp.Value.Y == posAsters.Y));
-                                    if (item.Count() > 0)
-                                    {
-                                        Console.WriteLine("Bam " + Destoryed + " : " + item.First().Value.X + ", " + item.First().Value.Y);
-                                        AsteroidsLiving.Remove(item.First().Key);
-                                        Destoryed++;
-                                    }
-                                }
-                            }
-                            else // there are more items than the number we would destroy
-                            {
-                                foreach (Asteroid posAstersALot in posTargetList)
-                                {
-                                    var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAstersALot.X && kvp.Value.Y == posAstersALot.Y));
-                                    Console.WriteLine("Bam " + Destoryed + " : " + item.First().Value.X + ", " + item.First().Value.Y);
-                                    AsteroidsLiving.Remove(item.First().Key);
-                                    Destoryed++;
-                                    if (Destoryed == 200)
-                                    {
-                                        Console.WriteLine("CoordsLocatedForLastTarget: " + posAstersALot.X.ToString() + ", " + posAstersALot.Y.ToString());
-                                        Console.WriteLine("10b Bet winning asteroid: " + (posAstersALot.X * 100 + posAstersALot.Y).ToString());
-                                    }
+                                    Console.WriteLine("CoordsLocatedForLastTarget: " + posAstersALot.X.ToString() + ", " + posAstersALot.Y.ToString());
+                                    Console.WriteLine("10b Bet winning asteroid: " + (posAstersALot.X * 100 + posAstersALot.Y).ToString());
                                 }
                             }
                         }
-                        //LowerLeftCords
-                        if (Detected.Any(posTarget => posTarget.X <= AsteroidWithLaser.X && posTarget.Y > AsteroidWithLaser.Y))
+                    }
+                    //LowerRightCords
+                    if (Detected.Any(posTarget => posTarget.X > AsteroidWithLaser.X && posTarget.Y >= AsteroidWithLaser.Y))
+                    {
+                        var posTargetList = Detected.Where(posTarget => posTarget.X > AsteroidWithLaser.X && posTarget.Y >= AsteroidWithLaser.Y).ToList();
+                        posTargetList = posTargetList.OrderBy(o =>
+                        Math.Abs(AsteroidWithLaser.X - o.X) / (AsteroidWithLaser.Y - o.Y != 0 ? AsteroidWithLaser.Y - o.Y : -.1)).ToList();
+                        if (posTargetList.Count() < 200 - Destoryed)
                         {
-                            var posTargetList = Detected.Where(posTarget => posTarget.X <= AsteroidWithLaser.X && posTarget.Y > AsteroidWithLaser.Y).ToList();
-                            posTargetList = posTargetList.OrderBy(o => 
-                            Math.Abs(AsteroidWithLaser.X - o.X)/ (AsteroidWithLaser.Y - o.Y != 0 ? Math.Abs(AsteroidWithLaser.Y - o.Y) : .1)).ToList();
-                            if (posTargetList.Count() < 200 - Destoryed)
+                            foreach (Asteroid posAsters in posTargetList)
                             {
-                                foreach (Asteroid posAsters in posTargetList)
+                                var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAsters.X && kvp.Value.Y == posAsters.Y));
+                                if (item.Count() > 0)
                                 {
-                                    var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAsters.X && kvp.Value.Y == posAsters.Y));
-                                    if (item.Count() > 0)
-                                    {
-                                        Console.WriteLine("Bam " + Destoryed + " : " + item.First().Value.X + ", " + item.First().Value.Y);
-                                        AsteroidsLiving.Remove(item.First().Key);
-                                        Destoryed++;
-                                    }
-                                }
-                            }
-                            else // there are more items than the number we would destroy
-                            {
-                                foreach (Asteroid posAstersALot in posTargetList)
-                                {
-                                    var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAstersALot.X && kvp.Value.Y == posAstersALot.Y));
                                     Console.WriteLine("Bam " + Destoryed + " : " + item.First().Value.X + ", " + item.First().Value.Y);
                                     AsteroidsLiving.Remove(item.First().Key);
                                     Destoryed++;
-                                    if (Destoryed == 200)
-                                    {
-                                        Console.WriteLine("CoordsLocatedForLastTarget: " + posAstersALot.X.ToString() + ", " + posAstersALot.Y.ToString());
-                                        Console.WriteLine("10b Bet winning asteroid: " + (posAstersALot.X * 100 + posAstersALot.Y).ToString());
-                                    }
                                 }
                             }
                         }
-                        //UpperLeftCords
-                        if (Detected.Any(posTarget => posTarget.X < AsteroidWithLaser.X && posTarget.Y <= AsteroidWithLaser.Y))
+                        else // there are more items than the number we would destroy
                         {
-                            var posTargetList = Detected.Where(posTarget => posTarget.X < AsteroidWithLaser.X && posTarget.Y <= AsteroidWithLaser.Y).ToList();
-                            posTargetList = posTargetList.OrderBy(o => Math.Abs(AsteroidWithLaser.X - o.X)
-                            /(AsteroidWithLaser.Y - o.Y != 0 ? Math.Abs(AsteroidWithLaser.Y - o.Y) : .1)
-                            ).ToList();
-                            posTargetList.Reverse();
-                            if (posTargetList.Count() < 200 - Destoryed)
+                            foreach (Asteroid posAstersALot in posTargetList)
                             {
-                                foreach (Asteroid posAsters in posTargetList)
+                                var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAstersALot.X && kvp.Value.Y == posAstersALot.Y));
+                                Console.WriteLine("Bam " + Destoryed + " : " + item.First().Value.X + ", " + item.First().Value.Y);
+                                AsteroidsLiving.Remove(item.First().Key);
+                                Destoryed++;
+                                if (Destoryed == 200)
                                 {
-                                    var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAsters.X && kvp.Value.Y == posAsters.Y));
-                                    if (item.Count() > 0)
-                                    {
-                                        Console.WriteLine("Bam " + Destoryed + " : " + item.First().Value.X + ", " + item.First().Value.Y);
-                                        AsteroidsLiving.Remove(item.First().Key);
-                                        Destoryed++;
-                                    }
+                                    Console.WriteLine("CoordsLocatedForLastTarget: " + posAstersALot.X.ToString() + ", " + posAstersALot.Y.ToString());
+                                    Console.WriteLine("10b Bet winning asteroid: " + (posAstersALot.X * 100 + posAstersALot.Y).ToString());
                                 }
                             }
-                            else // there are more items than the number we would destroy
+                        }
+                    }
+                    //LowerLeftCords
+                    if (Detected.Any(posTarget => posTarget.X <= AsteroidWithLaser.X && posTarget.Y > AsteroidWithLaser.Y))
+                    {
+                        var posTargetList = Detected.Where(posTarget => posTarget.X <= AsteroidWithLaser.X && posTarget.Y > AsteroidWithLaser.Y).ToList();
+                        posTargetList = posTargetList.OrderBy(o =>
+                        Math.Abs(AsteroidWithLaser.X - o.X) / (AsteroidWithLaser.Y - o.Y != 0 ? Math.Abs(AsteroidWithLaser.Y - o.Y) : .1)).ToList();
+                        if (posTargetList.Count() < 200 - Destoryed)
+                        {
+                            foreach (Asteroid posAsters in posTargetList)
                             {
-                                //make ordered because i'm not lazy any more
-                                foreach (Asteroid posAstersALot in posTargetList)
+                                var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAsters.X && kvp.Value.Y == posAsters.Y));
+                                if (item.Count() > 0)
                                 {
-                                    var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAstersALot.X && kvp.Value.Y == posAstersALot.Y));
                                     Console.WriteLine("Bam " + Destoryed + " : " + item.First().Value.X + ", " + item.First().Value.Y);
                                     AsteroidsLiving.Remove(item.First().Key);
                                     Destoryed++;
-                                    if (Destoryed == 200)
-                                    {
-                                        Console.WriteLine("CoordsLocatedForLastTarget: " + posAstersALot.X.ToString() + ", " + posAstersALot.Y.ToString());
-                                        Console.WriteLine("10b Bet winning asteroid: " + (posAstersALot.X * 100 + posAstersALot.Y).ToString());
-                                    }
                                 }
                             }
+                        }
+                        else // there are more items than the number we would destroy
+                        {
+                            foreach (Asteroid posAstersALot in posTargetList)
+                            {
+                                var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAstersALot.X && kvp.Value.Y == posAstersALot.Y));
+                                Console.WriteLine("Bam " + Destoryed + " : " + item.First().Value.X + ", " + item.First().Value.Y);
+                                AsteroidsLiving.Remove(item.First().Key);
+                                Destoryed++;
+                                if (Destoryed == 200)
+                                {
+                                    Console.WriteLine("CoordsLocatedForLastTarget: " + posAstersALot.X.ToString() + ", " + posAstersALot.Y.ToString());
+                                    Console.WriteLine("10b Bet winning asteroid: " + (posAstersALot.X * 100 + posAstersALot.Y).ToString());
+                                }
+                            }
+                        }
+                    }
+                    //UpperLeftCords
+                    if (Detected.Any(posTarget => posTarget.X < AsteroidWithLaser.X && posTarget.Y <= AsteroidWithLaser.Y))
+                    {
+                        var posTargetList = Detected.Where(posTarget => posTarget.X < AsteroidWithLaser.X && posTarget.Y <= AsteroidWithLaser.Y).ToList();
+                        posTargetList = posTargetList.OrderBy(o => Math.Abs(AsteroidWithLaser.X - o.X)
+                        / (AsteroidWithLaser.Y - o.Y != 0 ? Math.Abs(AsteroidWithLaser.Y - o.Y) : .1)
+                        ).ToList();
+                        posTargetList.Reverse();
+                        if (posTargetList.Count() < 200 - Destoryed)
+                        {
+                            foreach (Asteroid posAsters in posTargetList)
+                            {
+                                var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAsters.X && kvp.Value.Y == posAsters.Y));
+                                if (item.Count() > 0)
+                                {
+                                    Console.WriteLine("Bam " + Destoryed + " : " + item.First().Value.X + ", " + item.First().Value.Y);
+                                    AsteroidsLiving.Remove(item.First().Key);
+                                    Destoryed++;
+                                }
+                            }
+                        }
+                        else // there are more items than the number we would destroy
+                        {
+                            //make ordered because i'm not lazy any more
+                            foreach (Asteroid posAstersALot in posTargetList)
+                            {
+                                var item = AsteroidsLiving.Where(kvp => (kvp.Value.X == posAstersALot.X && kvp.Value.Y == posAstersALot.Y));
+                                Console.WriteLine("Bam " + Destoryed + " : " + item.First().Value.X + ", " + item.First().Value.Y);
+                                AsteroidsLiving.Remove(item.First().Key);
+                                Destoryed++;
+                                if (Destoryed == 200)
+                                {
+                                    Console.WriteLine("CoordsLocatedForLastTarget: " + posAstersALot.X.ToString() + ", " + posAstersALot.Y.ToString());
+                                    Console.WriteLine("10b Bet winning asteroid: " + (posAstersALot.X * 100 + posAstersALot.Y).ToString());
+                                }
+                            }
+                        }
 
                         //var item in AsteroidsLiving.Where(kvp => kvp.Value == DustAsteroid)
                     }
@@ -530,10 +530,10 @@ namespace Advent8_12Solver
                 long index = 0;
                 long relativeBase = 0;
                 bool Running = true;
-                while(Running)
+                while (Running)
                 {
-                    List<long> BrainOutputs = Advent11OpCodeReader(DictionaryInstructions, EmergencyPaintingBot.Location.Color, index, relativeBase);
-                    if(BrainOutputs.Count > 3) //Has three outputs
+                    List<long> BrainOutputs = Advent11OpCodeReader(DictionaryInstructions, EmergencyPaintingBot.Location.Color, index, relativeBase, 4);
+                    if (BrainOutputs.Count > 3) //Has three outputs
                     {
                         Console.WriteLine("Painting Panel (" + EmergencyPaintingBot.Location.X.ToString() + ", " + EmergencyPaintingBot.Location.Y.ToString() + ") Color: " + (BrainOutputs[0] == 0 ? "Black" : "White"));
                         EmergencyPaintingBot.Location.Color = Convert.ToInt32(BrainOutputs[0]);
@@ -579,7 +579,7 @@ namespace Advent8_12Solver
                         Running = false;
                     }
                 }
-                if(!EmergencyPaintingBot.UniquePanels.Any(kvp => kvp.Value.X == EmergencyPaintingBot.Location.X && kvp.Value.Y == EmergencyPaintingBot.Location.Y))
+                if (!EmergencyPaintingBot.UniquePanels.Any(kvp => kvp.Value.X == EmergencyPaintingBot.Location.X && kvp.Value.Y == EmergencyPaintingBot.Location.Y))
                 {
                     EmergencyPaintingBot.UniquePanels[EmergencyPaintingBot.UniquePanels.Count] = new Panel(EmergencyPaintingBot.Location);
                 }
@@ -621,7 +621,7 @@ namespace Advent8_12Solver
                 Moon Hoshido = new Moon("Hoshido", 4, -8, 8, 0, 0, 0);
                 Moon Noir = new Moon("Noir", 3, 5, -1, 0, 0, 0);
                 long timeSpan = 0;
-                while(timeSpan != 11)
+                while (timeSpan != 11)
                 {
                     Console.WriteLine("Current Step: " + timeSpan);
                     Console.WriteLine("Tharcia Pos; " + Tharcia.xPos + " " + Tharcia.yPos + " " + Tharcia.zPos);
@@ -654,10 +654,10 @@ namespace Advent8_12Solver
             else if (key.Contains("12b"))
             {
                 //12b inputs
-                //Moon Tharcia = new Moon("Tharcia", 7, 10, 17, 0, 0, 0);
-                //Moon Valentia = new Moon("Valentia", -2, 7, 0, 0, 0, 0);
-                //Moon Hoshido = new Moon("Hoshido", 12, 5, 12, 0, 0, 0);
-                //Moon Noir = new Moon("Noir", 5, -8, 6, 0, 0, 0);
+                Moon Tharcia = new Moon("Tharcia", 7, 10, 17, 0, 0, 0);
+                Moon Valentia = new Moon("Valentia", -2, 7, 0, 0, 0, 0);
+                Moon Hoshido = new Moon("Hoshido", 12, 5, 12, 0, 0, 0);
+                Moon Noir = new Moon("Noir", 5, -8, 6, 0, 0, 0);
 
                 //12b Test
                 //Moon Tharcia = new Moon("Tharcia", -8, -10, 0, 0, 0, 0);
@@ -666,51 +666,322 @@ namespace Advent8_12Solver
                 //Moon Noir = new Moon("Noir", 9, -8, -3, 0, 0, 0);
 
                 //12b Test2
-                Moon Tharcia = new Moon("Tharcia", -1, -0, 2, 0, 0, 0);
-                Moon Valentia = new Moon("Valentia", 2, -10, -7, 0, 0, 0);
-                Moon Hoshido = new Moon("Hoshido", 4, -8, 8, 0, 0, 0);
-                Moon Noir = new Moon("Noir", 3, 5, -1, 0, 0, 0);
+                //Moon Tharcia = new Moon("Tharcia", -1, -0, 2, 0, 0, 0);
+                //Moon Valentia = new Moon("Valentia", 2, -10, -7, 0, 0, 0);
+                //Moon Hoshido = new Moon("Hoshido", 4, -8, 8, 0, 0, 0);
+                //Moon Noir = new Moon("Noir", 3, 5, -1, 0, 0, 0);
                 long timeSpan = 0;
-                List<string> Universe = new List<string>();
+                List<long> UniverseEnergy = new List<long>();
+                string initialState = Tharcia.GenerateState() + "|" + Valentia.GenerateState() + "|" + Hoshido.GenerateState() + "|" + Noir.GenerateState();
+                Dictionary<long, List<string>> Universe = new Dictionary<long, List<string>>();
                 bool Repeat = false;
-                while (!Repeat && timeSpan < 4686774925)
-                {
-                    //List<Moon> Moons = new List<Moon>();
-                    Tharcia.CalculateVelocity(Valentia);
-                    Tharcia.CalculateVelocity(Hoshido);
-                    Tharcia.CalculateVelocity(Noir);
-                    Valentia.CalculateVelocity(Hoshido);
-                    Valentia.CalculateVelocity(Noir);
-                    Noir.CalculateVelocity(Hoshido);
+                #region rest
+                //while (!Repeat)
+                //{
+                //    //List<Moon> Moons = new List<Moon>();
+                //    Tharcia.CalculateVelocity(Valentia);
+                //    Tharcia.CalculateVelocity(Hoshido);
+                //    Tharcia.CalculateVelocity(Noir);
+                //    Valentia.CalculateVelocity(Hoshido);
+                //    Valentia.CalculateVelocity(Noir);
+                //    Noir.CalculateVelocity(Hoshido);
 
-                    Tharcia.MoveMoon();
-                    Valentia.MoveMoon();
-                    Hoshido.MoveMoon();
-                    Noir.MoveMoon();
-                    //Console.WriteLine("Tharcia : Potential Energy: " + Tharcia.GetPotentialEnergy() + " Tharcia : Kinetic Energy: " + Tharcia.GetKineticEnergy());
-                    //Console.WriteLine("Valentia : Potential Energy: " + Valentia.GetPotentialEnergy() + " Valentia : Kinetic Energy: " + Valentia.GetKineticEnergy());
-                    //Console.WriteLine("Hoshido : Potential Energy: " + Hoshido.GetPotentialEnergy() + " Hoshido : Kinetic Energy: " + Hoshido.GetKineticEnergy());
-                    //Console.WriteLine("Noir : Potential Energy: " + Noir.GetPotentialEnergy() + " Noir : Kinetic Energy: " + Noir.GetKineticEnergy());
-                    string UniverseState = Tharcia.GenerateState() + "|" + Valentia.GenerateState() + "|" + Hoshido.GenerateState() + "|" + Noir.GenerateState();
-                    //Moons.Add(new Moon(Tharcia));
-                    //Moons.Add(new Moon(Valentia));
-                    //Moons.Add(new Moon(Hoshido));
-                    //Moons.Add(new Moon(Noir));
-                    timeSpan = timeSpan + 1;
-                    var Repeated = from state in Universe.AsParallel()
-                                   where state == UniverseState
-                                   select state;
-                    if (Repeated.Count() > 0)
+                //    Tharcia.MoveMoon();
+                //    Valentia.MoveMoon();
+                //    Hoshido.MoveMoon();
+                //    Noir.MoveMoon();
+                //    #region oldcode
+                //    //Console.WriteLine("Tharcia : Potential Energy: " + Tharcia.GetPotentialEnergy() + " Tharcia : Kinetic Energy: " + Tharcia.GetKineticEnergy());
+                //    //Console.WriteLine("Valentia : Potential Energy: " + Valentia.GetPotentialEnergy() + " Valentia : Kinetic Energy: " + Valentia.GetKineticEnergy());
+                //    //Console.WriteLine("Hoshido : Potential Energy: " + Hoshido.GetPotentialEnergy() + " Hoshido : Kinetic Energy: " + Hoshido.GetKineticEnergy());
+                //    //Console.WriteLine("Noir : Potential Energy: " + Noir.GetPotentialEnergy() + " Noir : Kinetic Energy: " + Noir.GetKineticEnergy());
+                //    //Moons.Add(new Moon(Tharcia));
+                //    //Moons.Add(new Moon(Valentia));
+                //    //Moons.Add(new Moon(Hoshido));
+                //    //Moons.Add(new Moon(Noir));
+                //    //timeSpan = timeSpan + 1;
+                //    //var SameEnergy = from long energy in UniverseEnergy.AsParallel()
+                //    //                 where energy == GibbsNotSoFreeEnergy
+                //    //                 select energy;
+                //    //if (SameEnergy.Count() > 0)
+                //    //{
+                //    //    var Repeated = from state in Universe[GibbsNotSoFreeEnergy].AsParallel()
+                //    //                   where state == UniverseState
+                //    //                   select state;
+                //    //    if (Repeated.Count() > 0)
+                //    //    {
+                //    //        Repeat = true;
+                //    //    }
+                //    //    else
+                //    //    {
+                //    //        Universe[GibbsNotSoFreeEnergy].Add(UniverseState);
+                //    //    }
+                //    //}
+                //    //else
+                //    //{
+                //    //    UniverseEnergy.Add(GibbsNotSoFreeEnergy);
+                //    //    List<string> SameEnergyStates = new List<string>();
+                //    //    SameEnergyStates.Add(UniverseState);
+                //    //    Universe.Add(GibbsNotSoFreeEnergy, SameEnergyStates);
+                //    //}
+                //    #endregion oldcode
+                //    long GibbsNotSoFreeEnergy = Tharcia.GetEnergy() + Valentia.GetEnergy() + Hoshido.GetEnergy() + Noir.GetEnergy();
+                //    string UniverseState = Tharcia.GenerateState() + "|" + Valentia.GenerateState() + "|" + Hoshido.GenerateState() + "|" + Noir.GenerateState();
+
+                //    if(initialState.Equals(UniverseState))
+                //    {
+                //        Repeat = true;
+                //    }
+                //    else
+                //    {
+                //        timeSpan = timeSpan + 1;
+                //    }
+
+
+
+                //}
+                #endregion rest
+                Console.WriteLine("Cycle X: " + FindCycleX(new Moon(Tharcia), new Moon(Valentia), new Moon(Hoshido), new Moon(Noir)));
+                Console.WriteLine("Cycle Y: " + FindCycleY(new Moon(Tharcia), new Moon(Valentia), new Moon(Hoshido), new Moon(Noir)));
+                Console.WriteLine("Cycle Z: " + FindCycleZ(new Moon(Tharcia), new Moon(Valentia), new Moon(Hoshido), new Moon(Noir)));
+                Console.WriteLine("Day 12b: Simply find the GCM Now");
+            }
+            else if (key.Contains("13a"))
+            {
+                string[] Advent13Values = Properties.Resources.Advent13.Split(',');
+                Dictionary<long, long> DictionaryInstructions = new Dictionary<long, long>();
+                long index = 0;
+                long relativeBase = 0;
+                bool Running = true;
+                Dictionary<long, Panel> PanelDictionary = new Dictionary<long, Panel>();
+                long numPanels = 0;
+                for (int i = 0; i < Advent13Values.Length; i++)
+                {
+                    DictionaryInstructions[i] = long.Parse(Advent13Values[i]);
+                }
+                while (Running)
+                {
+                    List<long> ScreenOutput = Advent11OpCodeReader(DictionaryInstructions, 0, index, relativeBase, 3);
+                    //Console.WriteLine(ScreenOutput[0] + ScreenOutput[1] + ScreenOutput[2] + ScreenOutput[3] + ScreenOutput[4]);
+
+                    if (ScreenOutput.Count() == 5)
                     {
-                        Repeat = true;
+                        index = ScreenOutput[3];
+                        relativeBase = ScreenOutput[4];
+                        Panel currentPanel = new Panel(Convert.ToInt32(ScreenOutput[0]), Convert.ToInt32(ScreenOutput[1]), Convert.ToInt32(ScreenOutput[2]));
+                        if (!PanelDictionary.Any(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y)) //Add the unique panel
+                        {
+                            PanelDictionary.Add(numPanels, new Panel(currentPanel));
+                            numPanels++;
+                        }
+                        else if (PanelDictionary.Any(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y)) //Update the Panel
+                        {
+                            PanelDictionary[PanelDictionary.Where(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y).First().Key] = new Panel(currentPanel);
+                        }
                     }
                     else
                     {
-                        Universe.Add(UniverseState);
-                    }                   
+                        Running = false;
+                    }
                 }
-                Console.WriteLine("Day 12b: Total Energy: " + (Tharcia.GetEnergy() + Valentia.GetEnergy() + Hoshido.GetEnergy() + Noir.GetEnergy()));
-                Console.WriteLine("Total Time: " + (timeSpan-1));
+                var result = from Panel panel in PanelDictionary.Values
+                             where panel.Color == 2
+                             select panel;
+                Console.WriteLine("Day 13a: Number of block tiles: " + result.Count());
+            }
+            else if (key.Contains("13b"))
+            {
+                string[] Advent13Values = Properties.Resources.Advent13.Split(',');
+                Dictionary<long, long> DictionaryInstructions = new Dictionary<long, long>();
+                long index = 0;
+                long relativeBase = 0;
+                bool Running = true;
+                bool BlocksExist = true;
+                long Score = 0;
+                long input = 0;
+                Advent13Values[0] = "2";
+                Dictionary<long, Panel> PanelDictionary = new Dictionary<long, Panel>();
+                long numPanels = 0;
+                //PanelDictionary.Values.ToList().Sort(kvp => kvp.X)
+                List<Panel> TestList = new List<Panel>();
+                for (int i = 0; i < Advent13Values.Length; i++)
+                {
+                    DictionaryInstructions[i] = long.Parse(Advent13Values[i]);
+                }
+                while (BlocksExist)
+                {
+                    while (Running)
+                    {
+                        List<long> ScreenOutput = Advent11OpCodeReader(DictionaryInstructions, input, index, relativeBase, 3);
+                        //Console.WriteLine(ScreenOutput[0] + ScreenOutput[1] + ScreenOutput[2] + ScreenOutput[3] + ScreenOutput[4]);
+                        //X => 0 36
+                        //Y => 0 21
+                        if (ScreenOutput.Count() == 5)
+                        {
+                            index = ScreenOutput[3];
+                            relativeBase = ScreenOutput[4];
+                            if (ScreenOutput[0] == -1 && ScreenOutput[1] == 0)
+                            {
+                                Score = ScreenOutput[3];
+                            }
+                            Panel currentPanel = new Panel(Convert.ToInt32(ScreenOutput[0]), Convert.ToInt32(ScreenOutput[1]), Convert.ToInt32(ScreenOutput[1]) != 21 || Convert.ToInt32(ScreenOutput[2]) == 4 ? Convert.ToInt32(ScreenOutput[2]) : 1);
+                            if (!PanelDictionary.Any(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y)) //Add the unique panel
+                            {
+                                PanelDictionary.Add(numPanels, new Panel(currentPanel));
+                                numPanels++;
+                            }
+                            else if (PanelDictionary.Any(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y)) //Update the Panel
+                            {
+                                PanelDictionary[PanelDictionary.Where(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y).First().Key] = new Panel(currentPanel);
+                            }
+                            var ball = from Panel panel in PanelDictionary.Values
+                                        where panel.Color == 4
+                                        select panel;
+                            var paddle = from Panel panel in PanelDictionary.Values
+                                            where panel.Color == 3
+                                            select panel;
+                            if (ball.Count() > 0 && paddle.Count() > 0)
+                            {
+                                if (ball.First().X > paddle.First().X)
+                                {
+                                    input = 1;// Right
+                                }
+                                else if (ball.First().X < paddle.First().X)
+                                {
+                                    input = -1;// Left
+                                }
+                                else
+                                {
+                                    input = 0;
+                                }
+                            }
+                            //disable the screen for instant output
+                            Console.Clear();
+                            for (int y = 0; y <= 21; y++)
+                            {
+                                for (int x = 0; x <= 36; x++)
+                                {
+                                    if (PanelDictionary.Any(kvp => kvp.Value.X == x && kvp.Value.Y == y))
+                                    {
+                                        long color = PanelDictionary.Where(kvp => kvp.Value.X == x && kvp.Value.Y == y).First().Value.Color;
+                                        if (color == 0)
+                                        {
+                                            Console.Write(" ");
+                                        }
+                                        if (color == 1)
+                                        {
+                                            Console.Write("|");
+                                        }
+                                        if (color == 2)
+                                        {
+                                            Console.Write("H");
+                                        }
+                                        if (color == 3)
+                                        {
+                                            Console.Write("~");
+                                        }
+                                        if (color == 4)
+                                        {
+                                            Console.Write("O");
+                                        }
+                                        if (color > 4 || color < 0)
+                                        {
+                                            Console.Write("X");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.Write(" ");
+                                    }
+                                }
+                                Console.Write(Environment.NewLine);
+                                
+                            }
+                        }
+                        else
+                        {
+                            Running = false;
+                        }
+                    }
+                    var result = from Panel panel in PanelDictionary.Values
+                                 where panel.Color == 2
+                                 select panel;
+                    Console.WriteLine("Number of blocks: " + result.Count());
+                    if (result.Count() > 0)
+                    {
+                        index = 0;
+                        //relativeBase = 0;
+                        Running = true;
+                        var ball = from Panel panel in PanelDictionary.Values
+                                   where panel.Color == 4
+                                   select panel;
+                        var paddle = from Panel panel in PanelDictionary.Values
+                                     where panel.Color == 3
+                                     select panel;
+                        if (ball.First().X > paddle.First().X)
+                        {
+                            input = 1;// Right
+                        }
+                        else if (ball.First().X < paddle.First().X)
+                        {
+                            input = -1;// Left
+                        }
+                        else
+                        {
+                            input = 0;
+                        }
+
+                        for (int y = 0; y <= 21; y++)
+                        {
+                            for (int x = 0; x <= 36; x++)
+                            {
+                                if (PanelDictionary.Any(kvp => kvp.Value.X == x && kvp.Value.Y == y))
+                                {
+                                    long color = PanelDictionary.Where(kvp => kvp.Value.X == x && kvp.Value.Y == y).First().Value.Color;
+                                    if (color == 0)
+                                    {
+                                        Console.Write(" ");
+                                    }
+                                    if (color == 1)
+                                    {
+                                        Console.Write("|");
+                                    }
+                                    if (color == 2)
+                                    {
+                                        Console.Write("H");
+                                    }
+                                    if (color == 3)
+                                    {
+                                        Console.Write("~");
+                                    }
+                                    if (color == 4)
+                                    {
+                                        Console.Write("O");
+                                    }
+                                    if (color > 4 || color < 0)
+                                    {
+                                        Console.Write("X");
+                                    }
+                                }
+                                else
+                                {
+                                    Console.Write(" ");
+                                }
+                            }
+                            Console.Write(Environment.NewLine);
+                        }
+                    }
+                    else
+                    {
+                        BlocksExist = false;
+                        var ScorePanel = from Panel panel in PanelDictionary.Values
+                                where panel.X == -1 && panel.Y == 0
+                                select panel;
+                        Score = ScorePanel.First().Color;
+                    }
+                }
+
+                Console.WriteLine("Day 13a: Score" + Score);
             }
             else if (key.Contains("Test1"))
             {
@@ -770,18 +1041,18 @@ namespace Advent8_12Solver
                 inputs.Add(1);
                 inputs.Add(0);
                 inputs.Add(0);
-                foreach(long input in inputs)
+                foreach (long input in inputs)
                 {
                     List<long> outputs = new List<long>();
-                    outputs = Advent11OpCodeReader(DictionaryInstructions,input,index);
-                    if(outputs.Count > 0)
+                    outputs = Advent11OpCodeReader(DictionaryInstructions, input, index);
+                    if (outputs.Count > 0)
                     {
                         index = outputs[2];
                         Console.WriteLine("output 1: " + outputs[0] + " output 2: " + outputs[1] + " index: " + outputs[2]);
                     }
                     else
-                    { 
-                    
+                    {
+
                     }
                 }
             }
@@ -792,16 +1063,143 @@ namespace Advent8_12Solver
             Console.WriteLine("Finished");
             Console.ReadLine();
         }
+        public static long FindCycleX (Moon moon1, Moon moon2, Moon moon3, Moon moon4)
+        {
+            bool Repeat = false;
+            // get initial state
+            long md1 = moon1.xPos;
+            long mv1 = moon1.xVel;
+            long md2 = moon2.xPos;
+            long mv2 = moon2.xVel;
+            long md3 = moon3.xPos;
+            long mv3 = moon3.xVel;
+            long md4 = moon4.xPos;
+            long mv4 = moon4.xVel;
+            long TimeSpan = 0;
+            while (!Repeat)
+            {
+                moon1.CalculateVelocity(moon2);
+                moon1.CalculateVelocity(moon3);
+                moon1.CalculateVelocity(moon4);
+                moon2.CalculateVelocity(moon3);
+                moon2.CalculateVelocity(moon4);
+                moon4.CalculateVelocity(moon3);
+
+                moon1.MoveMoon();
+                moon2.MoveMoon();
+                moon3.MoveMoon();
+                moon4.MoveMoon();
+                TimeSpan++;
+                if (moon1.xPos == md1 && moon1.xVel == mv1)
+                {
+                    if(moon2.xPos == md2 && moon2.xVel == mv2)
+                    {
+                        if (moon3.xPos == md3 && moon3.xVel == mv3)
+                        {
+                            if (moon4.xPos == md4 && moon4.xVel == mv4)
+                            {
+                                Repeat = true;
+                            }
+                        }
+                    }
+                }
+            }
+            return TimeSpan;
+        }
+        public static long FindCycleY(Moon moon1, Moon moon2, Moon moon3, Moon moon4)
+        {
+            bool Repeat = false;
+            long md1 = moon1.yPos;
+            long mv1 = moon1.yVel;
+            long md2 = moon2.yPos;
+            long mv2 = moon2.yVel;
+            long md3 = moon3.yPos;
+            long mv3 = moon3.yVel;
+            long md4 = moon4.yPos;
+            long mv4 = moon4.yVel;
+            long TimeSpan = 0;
+            while (!Repeat)
+            {
+                moon1.CalculateVelocity(moon2);
+                moon1.CalculateVelocity(moon3);
+                moon1.CalculateVelocity(moon4);
+                moon2.CalculateVelocity(moon3);
+                moon2.CalculateVelocity(moon4);
+                moon4.CalculateVelocity(moon3);
+
+                moon1.MoveMoon();
+                moon2.MoveMoon();
+                moon3.MoveMoon();
+                moon4.MoveMoon();
+                TimeSpan++;
+                if (moon1.yPos == md1 && moon1.yVel == mv1)
+                {
+                    if (moon2.yPos == md2 && moon2.yVel == mv2)
+                    {
+                        if (moon3.yPos == md3 && moon3.yVel == mv3)
+                        {
+                            if (moon4.yPos == md4 && moon4.yVel == mv4)
+                            {
+                                Repeat = true;
+                            }
+                        }
+                    }
+                }
+            }
+            return TimeSpan;
+        }
+        public static long FindCycleZ(Moon moon1, Moon moon2, Moon moon3, Moon moon4)
+        {
+            bool Repeat = false;
+            long md1 = moon1.zPos;
+            long mv1 = moon1.zVel;
+            long md2 = moon2.zPos;
+            long mv2 = moon2.zVel;
+            long md3 = moon3.zPos;
+            long mv3 = moon3.zVel;
+            long md4 = moon4.zPos;
+            long mv4 = moon4.zVel;
+            long TimeSpan = 0;
+            while (!Repeat)
+            {
+                moon1.CalculateVelocity(moon2);
+                moon1.CalculateVelocity(moon3);
+                moon1.CalculateVelocity(moon4);
+                moon2.CalculateVelocity(moon3);
+                moon2.CalculateVelocity(moon4);
+                moon4.CalculateVelocity(moon3);
+
+                moon1.MoveMoon();
+                moon2.MoveMoon();
+                moon3.MoveMoon();
+                moon4.MoveMoon();
+                TimeSpan++;
+                if (moon1.zPos == md1 && moon1.zVel == mv1)
+                {
+                    if (moon2.zPos == md2 && moon2.zVel == mv2)
+                    {
+                        if (moon3.zPos == md3 && moon3.zVel == mv3)
+                        {
+                            if (moon4.zPos == md4 && moon4.zVel == mv4)
+                            {
+                                Repeat = true;
+                            }
+                        }
+                    }
+                }
+            }
+            return TimeSpan;
+        }
+
         public static bool CompareMoon(Moon moon1, Moon moon2)
         {
             return (moon1.xPos == moon2.xPos) && (moon1.yPos == moon2.yPos) && (moon1.zPos == moon2.zPos) && (moon1.xVel == moon2.xVel) && (moon1.yVel == moon2.yVel) && (moon1.zVel == moon2.zVel);
         }
-        private static List<long> Advent11OpCodeReader(Dictionary<long, long> TheCode, long input1, long input2 = 0, long input3 = 0)
+        private static List<long> Advent11OpCodeReader(Dictionary<long, long> TheCode, long input1, long index = 0, long relativeIndex = 0, long numberOutputs = 0)
         {
-            long i = input2;
-            long result = 0;
+            long i = index;
             bool flag = true;
-            long relativeBase = input3;
+            long relativeBase = relativeIndex;
             List<long> ListOfOutputs = new List<long>();
             while ((LastTwoDigitHelperAdvent5(TheCode[i]) == 1
                 || LastTwoDigitHelperAdvent5(TheCode[i]) == 2
@@ -829,15 +1227,7 @@ namespace Advent8_12Solver
                 else if (OpCode == 3)
                 {
                     // need to input
-                    if (flag)
-                    {
                         WriteModeAdvent9(TheCode, LocCode, i + 1, 2, input1, relativeBase);
-                        flag = false;
-                    }
-                    else
-                    {
-                        WriteModeAdvent9(TheCode, LocCode, i + 1, 2, input2, relativeBase);
-                    }
                     i += 2;
                 }
                 else if (OpCode == 4)
@@ -845,9 +1235,8 @@ namespace Advent8_12Solver
                     // need to output
 
                     ListOfOutputs.Add(ReadModeAdvent9(TheCode, LocCode, i + 1, 2, relativeBase));
-                    result = ReadModeAdvent9(TheCode, LocCode, i + 1, 2, relativeBase);
                     i += 2;
-                    if(ListOfOutputs.Count > 1)
+                    if(ListOfOutputs.Count == numberOutputs)
                     {
                         ListOfOutputs.Add(i);
                         ListOfOutputs.Add(relativeBase);
@@ -1244,17 +1633,23 @@ namespace Advent8_12Solver
                 }
             }
         }
+        //private class ScreenMaker
+        //{
+
+        //}
         private class Panel
         {
             public int X = 0;
             public int Y = 0;
-            public int Color = 0;
+            public int Color = 0; 
+            //0, black| 1, white
+            //0, Empty| 1, Wall| 2, Block| 3, Horizontal| 4, Ball|
 
             public Panel(int x, int y, int Color)
             {
                 this.X = x;
                 this.Y = y;
-                this.Color = 0;
+                this.Color = Color;
             }
 
             public Panel(Panel Old)
@@ -1307,7 +1702,7 @@ namespace Advent8_12Solver
             }
             public string GenerateState()
             {
-                return Name + "|" + xPos + "|" + yPos + "|" + zPos + "|" + xVel + "|" + yVel + "|" + zVel + "|";
+                return "|" + xPos + "|" + yPos + "|" + zPos + "|" + xVel + "|" + yVel + "|" + zVel + "|";
             }
 
             public void CalculateVelocity(Moon otherMoon)
