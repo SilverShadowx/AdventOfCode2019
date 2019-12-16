@@ -985,24 +985,25 @@ namespace Advent8_12Solver
             }
             else if (key.Contains("14a"))
             {
-                List<string> Advent14Input = Properties.Resources.Advent14Test1.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
+                List<string> Advent14Input = Properties.Resources.Advent14Test2.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
                 Dictionary<int, string> ChemicalFormulas = new Dictionary<int, string>();
                 /*
-                    10 ORE => 10 A
-                    1 ORE => 1 B
-                    7 A, 1 B => 1 C
-                    7 A, 1 C => 1 D
-                    7 A, 1 D => 1 E
-                    7 A, 1 E => 1 FUEL
-                 */
+                    9 ORE => 2 A
+                    8 ORE => 3 B
+                    7 ORE => 5 C
+                    3 A, 4 B => 1 AB
+                    5 B, 7 C => 1 BC
+                    4 C, 1 A => 1 CA
+                    2 AB, 3 BC, 4 CA => 1 FUEL
+                */
                 List<Formula> formulas = new List<Formula>();
-                List<Chemical> chemicals = new List<Chemical>();
+                List<Chemical> Chemicals = new List<Chemical>();
                 foreach (string str in Advent14Input)
                 {
                     List<string> RawFormula = str.Split(new string[] { "=>" }, StringSplitOptions.RemoveEmptyEntries).ToList();
                     List<string> InputList = new List<string>();
                     List<long> InputAmountList = new List<long>();
-                    if (RawFormula[0].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Count() > 2)
+                    if (RawFormula[0].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Count() > 1)
                     {
                         foreach(string chemicalBits in RawFormula[0].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList())
                         {
@@ -1010,8 +1011,19 @@ namespace Advent8_12Solver
                             long InputAmount = long.Parse(chemicalBits.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).First());
                             InputList.Add(InputString);
                             InputAmountList.Add(InputAmount);
+                            if (!Chemicals.Any(chem => chem.Name.Equals(InputString)))
+                            {
+                                Chemical chemical = new Chemical(0, InputString);
+                                Chemicals.Add(chemical);
+                            }
                         }
-                        Formula formula = new Formula(InputList, RawFormula[1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Last(), InputAmountList, long.Parse(RawFormula[1].Split(' ').First()));
+                        Formula formula = new Formula(InputList, RawFormula[1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Last(), InputAmountList, long.Parse(RawFormula[1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).First()));
+                        //formula.SimplfyFormula();
+                        if (!Chemicals.Any(chem => chem.Name.Equals(RawFormula[1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Last())))
+                        {
+                            Chemical chemical = new Chemical(0, RawFormula[1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Last());
+                            Chemicals.Add(chemical);
+                        }
                         formulas.Add(formula);
                     }
                     else
@@ -1021,9 +1033,23 @@ namespace Advent8_12Solver
                         InputList.Add(InputString);
                         InputAmountList.Add(InputAmount);
                         Formula formula = new Formula(InputList, RawFormula[1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Last(), InputAmountList, long.Parse(RawFormula[1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).First()));
+                        //formula.SimplfyFormula();
+                        if (!Chemicals.Any(chem => chem.Name.Equals(RawFormula[1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Last())))
+                        {
+                            Chemical chemical = new Chemical(0, RawFormula[1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Last());
+                            Chemicals.Add(chemical);
+                        }
+                        if (!Chemicals.Any(chem => chem.Name.Equals(InputString)))
+                        {
+                            Chemical chemical = new Chemical(0, InputString);
+                            Chemicals.Add(chemical);
+                        }
                         formulas.Add(formula);
                     }
                 }
+                Factory factory = new Factory(Chemicals, formulas);
+                long result = factory.HowMuchOre(1, "FUEL");
+                Console.WriteLine("Day 14a: Total ORE needed: " + result);
             }
             else if (key.Contains("Test1"))
             {
@@ -1147,14 +1173,27 @@ namespace Advent8_12Solver
         }
         public class Chemical
         {
-            public long Number = 0;
+            public long Amount = 0;
             public string Name = string.Empty;
-            public long Cost = 0;
+            public long Produced = 0;
 
             public Chemical (int amount, string name)
             {
-                Number = amount;
+                Amount = amount;
                 Name = name;
+            }
+
+            public void IncreaseResource (long amount)
+            {
+                Amount += amount;
+            }
+            public void ProducedResource (long amount)
+            {
+                Produced += amount;
+            }
+            public void DecreaseResource (long amount)
+            {
+                Amount -= amount;
             }
         }
         public class Factory
@@ -1170,17 +1209,101 @@ namespace Advent8_12Solver
                 FormulaList = formulaList;
             }
 
-            public long HowMuchOre (int HowMuchFuel, string chemical)
+            public long HowMuchOre (long chemWanted, string chemical)
             {
                 long OresRequired = 0;
                 Formula ChemicalFormula = (from Formula formula in FormulaList
                                           where formula.Output.Equals(chemical)
                                           select formula).First();
-                if(ChemicalFormula.Inputs.Contains("ORE"))
+                Chemical outputChemical = (from Chemical chem in ChemSupplies
+                                           where chem.Name.Equals(chemical)
+                                           select chem).First();
+                int Multiplier = 1;
+                long currentResource = outputChemical.Amount;
+                // Checks if this is a base formula
+                if(outputChemical.Amount >= chemWanted)
                 {
-
+                    outputChemical.DecreaseResource(chemWanted);
                 }
-                return 0;
+                else if (ChemicalFormula.Inputs.Contains("ORE"))
+                {
+                    // I need to take input amount of ORE times
+                    // And convert to equal or surplus amount of ore
+                    Chemical OreResource = (from Chemical chem in ChemSupplies
+                                            where chem.Name.Equals("ORE")
+                                            select chem).First();
+                    int indexOre = ChemicalFormula.Inputs.IndexOf("ORE");
+                    long OresNeeded = ChemicalFormula.InputAmounts[indexOre];
+                    if(ChemicalFormula.OutputAmount < chemWanted)
+                    {
+                        while((ChemicalFormula.OutputAmount * Multiplier) < chemWanted)
+                        {
+                            if((ChemicalFormula.OutputAmount * Multiplier) > (chemWanted - currentResource))
+                            {
+                                outputChemical.DecreaseResource(chemWanted - (ChemicalFormula.OutputAmount * Multiplier));
+                                break;
+                            }
+                            else
+                            {
+                                Multiplier++;
+                            }                         
+                        }
+                        OresRequired = OresNeeded * Multiplier;
+                        OreResource.ProducedResource(OresRequired);
+                        if (ChemicalFormula.OutputAmount * Multiplier > chemWanted - currentResource)
+                        {
+                            outputChemical.IncreaseResource((ChemicalFormula.OutputAmount * Multiplier) - (chemWanted - currentResource));
+                        }
+                        outputChemical.ProducedResource(ChemicalFormula.OutputAmount * Multiplier);
+                    }
+                    else
+                    {
+                        OresRequired = OresNeeded;
+                        if (ChemicalFormula.OutputAmount * Multiplier > chemWanted)
+                        {
+                            outputChemical.IncreaseResource((ChemicalFormula.OutputAmount * Multiplier) - chemWanted);
+                        }
+                        outputChemical.ProducedResource(ChemicalFormula.OutputAmount * Multiplier);
+                    }
+                }
+                // Usually if intermediate formula
+                else
+                {
+                    for(int i = 0; i < ChemicalFormula.Inputs.Count(); i++)
+                    {
+                        long OresNeeded = HowMuchOre(ChemicalFormula.InputAmounts[i] * chemWanted, ChemicalFormula.Inputs[i]);
+                        OresRequired += OresNeeded;
+                        // maybe more here
+                    }
+                    if (ChemicalFormula.OutputAmount < chemWanted)
+                    {  
+                        while ((ChemicalFormula.OutputAmount * Multiplier) < chemWanted)
+                        {
+                            if ((ChemicalFormula.OutputAmount * Multiplier) > (chemWanted - currentResource))
+                            {
+                                outputChemical.DecreaseResource(chemWanted - (ChemicalFormula.OutputAmount * Multiplier));
+                                break;
+                            }
+                            else
+                            {
+                                Multiplier++;
+                            }
+                        }
+                        if (ChemicalFormula.OutputAmount * Multiplier > chemWanted)
+                        {
+                            Chemical surplusChem = (from Chemical chem in ChemSupplies
+                                                    where chem.Name.Equals(chemical)
+                                                    select chem).First();
+                            surplusChem.IncreaseResource((ChemicalFormula.OutputAmount * Multiplier) - chemWanted);
+                        }
+                        Chemical producedChem = (from Chemical chem in ChemSupplies
+                                                where chem.Name.Equals(chemical)
+                                                select chem).First();
+                        producedChem.ProducedResource(ChemicalFormula.OutputAmount * Multiplier);
+                    }
+                }
+                Console.WriteLine("Chemical Being Outputed: " + (Multiplier * ChemicalFormula.OutputAmount) + " " + chemical + " Ores Needed: " + OresRequired);
+                return OresRequired;
             }
         }
         public static long FindCycleX (Moon moon1, Moon moon2, Moon moon3, Moon moon4)
