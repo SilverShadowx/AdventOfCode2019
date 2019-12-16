@@ -218,6 +218,107 @@ namespace Advent8_12Solver.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 1 ZQVND =&gt; 2 MBZM
+        ///2 KZCVX, 1 SZBQ =&gt; 7 HQFB
+        ///1 PFSQF =&gt; 9 RSVN
+        ///2 PJXQB =&gt; 4 FSNZ
+        ///20 JVDKQ, 2 LSQFK, 8 SDNCK, 1 MQJNV, 13 LBTV, 3 KPBRX =&gt; 5 QBPC
+        ///131 ORE =&gt; 8 WDQSL
+        ///19 BRGJH, 2 KNVN, 3 CRKW =&gt; 9 MQJNV
+        ///16 DNPM, 1 VTVBF, 11 JSGM =&gt; 1 BWVJ
+        ///3 KNVN, 1 JQRML =&gt; 7 HGQJ
+        ///1 MRQJ, 2 HQFB, 1 MQJNV =&gt; 5 VQLP
+        ///1 PLGH =&gt; 5 DMGF
+        ///12 DMGF, 3 DNPM, 1 CRKW =&gt; 1 CLML
+        ///1 JSGM, 1 RSVN =&gt; 5 TMNKH
+        ///1 RFJLG, 3 CFWC =&gt; 2 ZJMC
+        ///1 BRGJH =&gt; 5 KPBRX
+        ///1 SZBQ, 17 GBVJF =&gt; 4 ZHGL
+        ///2 PLGH =&gt; 5 CFWC
+        ///4 FCBZS, 2 XQWHB =&gt; 8 JSGM
+        ///2 PFSQ [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Advent14 {
+            get {
+                return ResourceManager.GetString("Advent14", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 9 ORE =&gt; 2 A
+        ///8 ORE =&gt; 3 B
+        ///7 ORE =&gt; 5 C
+        ///3 A, 4 B =&gt; 1 AB
+        ///5 B, 7 C =&gt; 1 BC
+        ///4 C, 1 A =&gt; 1 CA
+        ///2 AB, 3 BC, 4 CA =&gt; 1 FUEL.
+        /// </summary>
+        internal static string Advent14Test1 {
+            get {
+                return ResourceManager.GetString("Advent14Test1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 157 ORE =&gt; 5 NZVS
+        ///165 ORE =&gt; 6 DCFZ
+        ///44 XJWVT, 5 KHKGT, 1 QDVJ, 29 NZVS, 9 GPVTF, 48 HKGWZ =&gt; 1 FUEL
+        ///12 HKGWZ, 1 GPVTF, 8 PSHF =&gt; 9 QDVJ
+        ///179 ORE =&gt; 7 PSHF
+        ///177 ORE =&gt; 5 HKGWZ
+        ///7 DCFZ, 7 PSHF =&gt; 2 XJWVT
+        ///165 ORE =&gt; 2 GPVTF
+        ///3 DCFZ, 7 NZVS, 5 HKGWZ, 10 PSHF =&gt; 8 KHKGT.
+        /// </summary>
+        internal static string Advent14Test2 {
+            get {
+                return ResourceManager.GetString("Advent14Test2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2 VPVL, 7 FWMGM, 2 CXFTF, 11 MNCFX =&gt; 1 STKFG
+        ///17 NVRVD, 3 JNWZP =&gt; 8 VPVL
+        ///53 STKFG, 6 MNCFX, 46 VJHF, 81 HVMC, 68 CXFTF, 25 GNMV =&gt; 1 FUEL
+        ///22 VJHF, 37 MNCFX =&gt; 5 FWMGM
+        ///139 ORE =&gt; 4 NVRVD
+        ///144 ORE =&gt; 7 JNWZP
+        ///5 MNCFX, 7 RFSQX, 2 FWMGM, 2 VPVL, 19 CXFTF =&gt; 3 HVMC
+        ///5 VJHF, 7 MNCFX, 9 VPVL, 37 CXFTF =&gt; 6 GNMV
+        ///145 ORE =&gt; 6 MNCFX
+        ///1 NVRVD =&gt; 8 CXFTF
+        ///1 VJHF, 6 MNCFX =&gt; 4 RFSQX
+        ///176 ORE =&gt; 6 VJHF.
+        /// </summary>
+        internal static string Advent14Test3 {
+            get {
+                return ResourceManager.GetString("Advent14Test3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 171 ORE =&gt; 8 CNZTR
+        ///7 ZLQW, 3 BMBT, 9 XCVML, 26 XMNCP, 1 WPTQ, 2 MZWV, 1 RJRHP =&gt; 4 PLWSL
+        ///114 ORE =&gt; 4 BHXH
+        ///14 VRPVC =&gt; 6 BMBT
+        ///6 BHXH, 18 KTJDG, 12 WPTQ, 7 PLWSL, 31 FHTLT, 37 ZDVW =&gt; 1 FUEL
+        ///6 WPTQ, 2 BMBT, 8 ZLQW, 18 KTJDG, 1 XMNCP, 6 MZWV, 1 RJRHP =&gt; 6 FHTLT
+        ///15 XDBXC, 2 LTCX, 1 VRPVC =&gt; 6 ZLQW
+        ///13 WPTQ, 10 LTCX, 3 RJRHP, 14 XMNCP, 2 MZWV, 1 ZLQW =&gt; 1 ZDVW
+        ///5 BMBT =&gt; 4 WPTQ
+        ///189 ORE =&gt; 9 KTJDG
+        ///1 MZWV, 17 XDBXC, 3 XCVML =&gt; 2 XMNCP
+        ///12 VRPVC, 27 CNZTR =&gt; 2 XDBXC
+        ///15 KTJDG, 12 BHXH =&gt; 5 XCVML
+        ///3 BHXH, 2 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Advent14Test4 {
+            get {
+                return ResourceManager.GetString("Advent14Test4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 10222212222222202220222202022222022222222022222222122221220222022222222222222222220222220220222200002222012222122222222222222222222222222222221022222202222222222222212222222212222222222222222222222222122221221222022222222222222202220222221221222201212222012222222222222222222222222222222222222022222201222222222222202222222212022222222222222222222222022221210222122222222222222222221222220220222220212222222222222222222222222222222222222222222222222211222212222222202220222202022222022222222222222222022220212222 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Advent8 {

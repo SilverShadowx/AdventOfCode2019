@@ -983,6 +983,48 @@ namespace Advent8_12Solver
 
                 Console.WriteLine("Day 13a: Score" + Score);
             }
+            else if (key.Contains("14a"))
+            {
+                List<string> Advent14Input = Properties.Resources.Advent14Test1.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
+                Dictionary<int, string> ChemicalFormulas = new Dictionary<int, string>();
+                /*
+                    10 ORE => 10 A
+                    1 ORE => 1 B
+                    7 A, 1 B => 1 C
+                    7 A, 1 C => 1 D
+                    7 A, 1 D => 1 E
+                    7 A, 1 E => 1 FUEL
+                 */
+                List<Formula> formulas = new List<Formula>();
+                List<Chemical> chemicals = new List<Chemical>();
+                foreach (string str in Advent14Input)
+                {
+                    List<string> RawFormula = str.Split(new string[] { "=>" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                    List<string> InputList = new List<string>();
+                    List<long> InputAmountList = new List<long>();
+                    if (RawFormula[0].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Count() > 2)
+                    {
+                        foreach(string chemicalBits in RawFormula[0].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList())
+                        {
+                            string InputString = chemicalBits.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Last();
+                            long InputAmount = long.Parse(chemicalBits.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).First());
+                            InputList.Add(InputString);
+                            InputAmountList.Add(InputAmount);
+                        }
+                        Formula formula = new Formula(InputList, RawFormula[1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Last(), InputAmountList, long.Parse(RawFormula[1].Split(' ').First()));
+                        formulas.Add(formula);
+                    }
+                    else
+                    {
+                        string InputString = RawFormula[0].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Last();
+                        long InputAmount = long.Parse(RawFormula[0].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).First());                        
+                        InputList.Add(InputString);
+                        InputAmountList.Add(InputAmount);
+                        Formula formula = new Formula(InputList, RawFormula[1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Last(), InputAmountList, long.Parse(RawFormula[1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).First()));
+                        formulas.Add(formula);
+                    }
+                }
+            }
             else if (key.Contains("Test1"))
             {
                 Robot EmergencyPaintingBot = new Robot();
@@ -1062,6 +1104,84 @@ namespace Advent8_12Solver
             }
             Console.WriteLine("Finished");
             Console.ReadLine();
+        }
+        public class Formula
+        {
+            public List<string> Inputs = new List<string>();
+            public List<long> InputAmounts = new List<long>();
+            public long OreNeeded = 0;
+            public string Output = string.Empty;
+            public long OutputAmount = 0;
+
+            public Formula (List<string> inputs, string output, List<long> amount, long outputAmount)
+            {
+                Inputs = inputs;
+                Output = output;
+                OutputAmount = outputAmount;
+                InputAmounts = amount;
+            }
+
+            public void GetInputAmount(string formulaString)
+            {
+
+            }
+
+            public void SimplfyFormula ()
+            {
+                List<int> GCDInput = new List<int>();
+                foreach(long item in InputAmounts)
+                {
+                    GCDInput.Add(Convert.ToInt32(item));
+                }
+                GCDInput.Add(Convert.ToInt32(OutputAmount));
+                long result = GCD(GCDInput.ToArray());
+                if(result > 1)
+                {
+                    for (int i = 0; i < InputAmounts.Count(); i++)
+                    {
+                        InputAmounts[i] = InputAmounts[i] / result;
+                    }
+                    OutputAmount = OutputAmount / result;
+                }
+            }
+        }
+        public class Chemical
+        {
+            public long Number = 0;
+            public string Name = string.Empty;
+            public long Cost = 0;
+
+            public Chemical (int amount, string name)
+            {
+                Number = amount;
+                Name = name;
+            }
+        }
+        public class Factory
+        {
+            List<Chemical> ChemSupplies = new List<Chemical>();
+            List<Formula> FormulaList = new List<Formula>();
+            bool HasFuel = false;
+            long OreReserve = 0;
+
+            public Factory (List<Chemical> chemSupplies, List<Formula> formulaList)
+            {
+                ChemSupplies = chemSupplies;
+                FormulaList = formulaList;
+            }
+
+            public long HowMuchOre (int HowMuchFuel, string chemical)
+            {
+                long OresRequired = 0;
+                Formula ChemicalFormula = (from Formula formula in FormulaList
+                                          where formula.Output.Equals(chemical)
+                                          select formula).First();
+                if(ChemicalFormula.Inputs.Contains("ORE"))
+                {
+
+                }
+                return 0;
+            }
         }
         public static long FindCycleX (Moon moon1, Moon moon2, Moon moon3, Moon moon4)
         {
