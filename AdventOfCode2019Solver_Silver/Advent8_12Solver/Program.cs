@@ -1359,7 +1359,7 @@ namespace Advent8_12Solver
                                            select chem).First();
                 long MainRatio = Convert.ToInt64(Math.Floor(Convert.ToDouble((AmountOfOre / 100000))));
                 long QuickRatio = Convert.ToInt64(Math.Floor(Convert.ToDouble((AmountOfOre / (1000)))));
-
+                long BaseAmount = HowMuchOre(1, "FUEL");
                 //long AmountOfOreUsed = HowMuchOre(82892753, "FUEL");
                 //while (AmountOfOre > 0)
                 //{
