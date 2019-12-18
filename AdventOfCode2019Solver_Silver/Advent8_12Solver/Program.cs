@@ -1054,7 +1054,7 @@ namespace Advent8_12Solver
             else if (key.Contains("14b"))
             {
                 long Ores = 1000000000000;
-                List<string> Advent14Input = Properties.Resources.Advent14Test2.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
+                List<string> Advent14Input = Properties.Resources.Advent14.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
                 Dictionary<int, string> ChemicalFormulas = new Dictionary<int, string>();
                 /*
                     9 ORE => 2 A
@@ -1282,11 +1282,11 @@ namespace Advent8_12Solver
             {
                 long OresRequired = 0;
                 // Get Formula
-                Formula ChemicalFormula = (from Formula formula in FormulaList
+                Formula ChemicalFormula = (from Formula formula in FormulaList//.AsParallel()
                                           where formula.Output.Equals(chemical)
                                           select formula).First();
                 // Get CurrentChemical Reserve
-                Chemical OutputChemical = (from Chemical chem in ChemSupplies
+                Chemical OutputChemical = (from Chemical chem in ChemSupplies//.AsParallel()
                                            where chem.Name.Equals(chemical)
                                            select chem).First();
                 long CurrentResourceAmount = OutputChemical.Amount;
@@ -1318,7 +1318,7 @@ namespace Advent8_12Solver
                 // Now we process for more chem Ores
                 if(ChemicalFormula.Inputs.Contains("ORE") && chemWanted > 0)
                 {
-                    Chemical OreResource = (from Chemical chem in ChemSupplies
+                    Chemical OreResource = (from Chemical chem in ChemSupplies//.AsParallel()
                                             where chem.Name.Equals("ORE")
                                             select chem).First();
                     int indexOre = ChemicalFormula.Inputs.IndexOf("ORE");
@@ -1360,115 +1360,37 @@ namespace Advent8_12Solver
                 long MainRatio = Convert.ToInt64(Math.Floor(Convert.ToDouble((AmountOfOre / 100000))));
                 long QuickRatio = Convert.ToInt64(Math.Floor(Convert.ToDouble((AmountOfOre / (1000)))));
                 long BaseAmount = HowMuchOre(1, "FUEL");
-                //long AmountOfOreUsed = HowMuchOre(82892753, "FUEL");
-                //while (AmountOfOre > 0)
-                //{
-                //    long AmountOfOreUsed = HowMuchOre(10000000, "FUEL");
-                //    if (AmountOfOre - AmountOfOreUsed < 0)
-                //    {
-                //        break;
-                //    }
-                //    else
-                //    {
-                //        AmountOfOre -= AmountOfOreUsed;
-                //    }
-                //}
-                //while (AmountOfOre > 0)
-                //{
-                //    long AmountOfOreUsed = HowMuchOre(10000000, "FUEL");
-                //    if (AmountOfOre - AmountOfOreUsed < 0)
-                //    {
-                //        break;
-                //    }
-                //    else
-                //    {
-                //        AmountOfOre -= AmountOfOreUsed;
-                //    }
-                //}
-                //while (AmountOfOre > 0)
-                //{
-                //    long AmountOfOreUsed = HowMuchOre(1000000, "FUEL");
-                //    if (AmountOfOre - AmountOfOreUsed < 0)
-                //    {
-                //        break;
-                //    }
-                //    else
-                //    {
-                //        AmountOfOre -= AmountOfOreUsed;
-                //    }
-                //}
-                //while (AmountOfOre > 0)
-                //{
-                //    long AmountOfOreUsed = HowMuchOre(1000000, "FUEL");
-                //    if (AmountOfOre - AmountOfOreUsed < 0)
-                //    {
-                //        break;
-                //    }
-                //    else
-                //    {
-                //        AmountOfOre -= AmountOfOreUsed;
-                //    }
-                //}
-                //while (AmountOfOre > 0)
-                //{
-                //    long AmountOfOreUsed = HowMuchOre(1000000, "FUEL");
-                //    if (AmountOfOre - AmountOfOreUsed < 0)
-                //    {
-                //        break;
-                //    }
-                //    else
-                //    {
-                //        AmountOfOre -= AmountOfOreUsed;
-                //    }
-                //}
-                //while (AmountOfOre > 0)
-                //{
-                //    long AmountOfOreUsed = HowMuchOre(1000, "FUEL");
-                //    if (AmountOfOre - AmountOfOreUsed < 0)
-                //    {
-                //        break;
-                //    }
-                //    else
-                //    {
-                //        AmountOfOre -= AmountOfOreUsed;
-                //    }
-
-                //}
-                //while (AmountOfOre > 0)
-                //{
-                //        long AmountOfOreUsed = HowMuchOre(100, "FUEL");
-                //        if (AmountOfOre - AmountOfOreUsed < 0)
-                //        {
-                //            break;
-                //        }
-                //        else
-                //        {
-                //            AmountOfOre -= AmountOfOreUsed;
-                //        }
-                //}
-                //while (AmountOfOre > 0)
-                //{
-                //    long AmountOfOreUsed = HowMuchOre(10, "FUEL");
-                //    if (AmountOfOre - AmountOfOreUsed < 0)
-                //    {
-                //        break;
-                //    }
-                //    else
-                //    {
-                //        AmountOfOre -= AmountOfOreUsed;
-                //    }
-                //}
-                while (AmountOfOre > 0)
+                AmountOfOre -= BaseAmount;
+                bool test = true;
+                while(test)
                 {
-                    long AmountOfOreUsed = HowMuchOre(1, "FUEL");
-                    if (AmountOfOre - AmountOfOreUsed < 0)
+                    Console.WriteLine("This Much Ore Left: " + AmountOfOre);
+                    Console.WriteLine("BaseCost: " + BaseAmount);
+                    Console.WriteLine("How much more fuel?");
+                    string Wanted = Console.ReadLine();
+                    if(Wanted != "Zero")
                     {
-                        break;
+                        long input = Int32.Parse(Wanted);
+                        long AmountOfOreUsedByUser = HowMuchOre(input, "FUEL");
+                        AmountOfOre = AmountOfOre - AmountOfOreUsedByUser;
                     }
                     else
                     {
-                        AmountOfOre -= AmountOfOreUsed;
+                        test = false;
+                        Console.WriteLine("Proceeding with iterative runs");
                     }
+                }
+                while (AmountOfOre > 0)
+                {
+                        long AmountOfOreUsed = HowMuchOre(1, "FUEL");
+                        if (AmountOfOre - AmountOfOreUsed < 0)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            AmountOfOre = AmountOfOre - AmountOfOreUsed;
+                        }
                 }
                 return FUEL.Produced;
             }
