@@ -835,11 +835,11 @@ namespace Advent8_12Solver
                                 PanelDictionary[PanelDictionary.Where(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y).First().Key] = new Panel(currentPanel);
                             }
                             var ball = from Panel panel in PanelDictionary.Values
-                                        where panel.Color == 4
-                                        select panel;
+                                       where panel.Color == 4
+                                       select panel;
                             var paddle = from Panel panel in PanelDictionary.Values
-                                            where panel.Color == 3
-                                            select panel;
+                                         where panel.Color == 3
+                                         select panel;
                             if (ball.Count() > 0 && paddle.Count() > 0)
                             {
                                 if (ball.First().X > paddle.First().X)
@@ -895,7 +895,7 @@ namespace Advent8_12Solver
                                     }
                                 }
                                 Console.Write(Environment.NewLine);
-                                
+
                             }
                         }
                         else
@@ -975,8 +975,8 @@ namespace Advent8_12Solver
                     {
                         BlocksExist = false;
                         var ScorePanel = from Panel panel in PanelDictionary.Values
-                                where panel.X == -1 && panel.Y == 0
-                                select panel;
+                                         where panel.X == -1 && panel.Y == 0
+                                         select panel;
                         Score = ScorePanel.First().Color;
                     }
                 }
@@ -1005,7 +1005,7 @@ namespace Advent8_12Solver
                     List<long> InputAmountList = new List<long>();
                     if (RawFormula[0].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Count() > 1)
                     {
-                        foreach(string chemicalBits in RawFormula[0].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList())
+                        foreach (string chemicalBits in RawFormula[0].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList())
                         {
                             string InputString = chemicalBits.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Last();
                             long InputAmount = long.Parse(chemicalBits.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).First());
@@ -1029,7 +1029,7 @@ namespace Advent8_12Solver
                     else
                     {
                         string InputString = RawFormula[0].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Last();
-                        long InputAmount = long.Parse(RawFormula[0].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).First());                        
+                        long InputAmount = long.Parse(RawFormula[0].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).First());
                         InputList.Add(InputString);
                         InputAmountList.Add(InputAmount);
                         Formula formula = new Formula(InputList, RawFormula[1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Last(), InputAmountList, long.Parse(RawFormula[1].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).First()));
@@ -1120,6 +1120,520 @@ namespace Advent8_12Solver
                 long result = factory.ProduceFuel(Ores);
                 Console.WriteLine("Day 14b Produced Fuel: " + result);
             }
+            else if (key.Contains("15a"))
+            {
+                string[] Advent15Values = Properties.Resources.Advent15.Split(',');
+                Dictionary<long, long> DictionaryInstructions = new Dictionary<long, long>();
+                Dictionary<long, Panel> PanelDictionary = new Dictionary<long, Panel>();
+                bool Running = true;
+                long index = 0;
+                long relativeBase = 0;
+                long positionX = 0;
+                long positionY = 0;
+                long numPanels = 1;
+                bool directControl = true;
+                bool Display = true;
+                PanelDictionary[0] = new Panel(0, 0, 3);
+                for (int i = 0; i < Advent15Values.Length; i++)
+                {
+                    DictionaryInstructions[i] = long.Parse(Advent15Values[i]);
+                }
+                while (Running)
+                {
+                    long input = 0;
+                    if (directControl)
+                    {
+                        Console.WriteLine("Input Command: 1 North, 2 South, 3 West, 4 East::");
+                        string keyInput = Console.ReadLine();
+                        if (keyInput.Equals("STOP"))
+                        {
+                            Running = false;
+                        }
+                        else if (keyInput.Equals("Yokai"))
+                        {
+                            directControl = false;
+                        }
+                        else if (keyInput.Equals("Display"))
+                        {
+                            Display = Display ? false : true;
+                        }
+                        else
+                        {
+                            switch (keyInput)
+                            {
+                                case "w":
+                                    input = 1;
+                                    break;
+                                case "a":
+                                    input = 3;
+                                    break;
+                                case "s":
+                                    input = 2;
+                                    break;
+                                case "d":
+                                    input = 4;
+                                    break;
+                                default:
+                                    Console.WriteLine("Incorrect Input");
+                                    break;
+                            }
+                        }
+                        List<long> ScreenOutput = Advent11OpCodeReader(DictionaryInstructions, Convert.ToInt64(input), index, relativeBase, 1);
+                        if (ScreenOutput.Count > 2)
+                        {
+                            if (ScreenOutput[0] == 0)
+                            {
+                                //Positions stay the same
+                                Panel currentPanel = new Panel(Convert.ToInt32(positionX), Convert.ToInt32(positionY), Convert.ToInt32(3));
+                                if (!PanelDictionary.Any(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y)) //Add the unique panel
+                                {
+                                    PanelDictionary.Add(numPanels, new Panel(currentPanel));
+                                    numPanels++;
+                                }
+                                else if (PanelDictionary.Any(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y)) //Update the Panel
+                                {
+                                    PanelDictionary[PanelDictionary.Where(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y).First().Key] = new Panel(currentPanel);
+                                }
+
+                                long adjustX = 0;
+                                long adjustY = 0;
+                                if (input == 1)//North
+                                {
+                                    adjustY = 1;
+                                }
+                                else if (input == 2)//South
+                                {
+                                    adjustY = -1;
+                                }
+                                else if (input == 3)//West
+                                {
+                                    adjustX = -1;
+                                }
+                                else if (input == 4)//East
+                                {
+                                    adjustX = 1;
+                                }
+                                Panel ProjectedPanel = new Panel(Convert.ToInt32(positionX + adjustX), Convert.ToInt32(positionY + adjustY), Convert.ToInt32(0));
+                                if (!PanelDictionary.Any(KVP => KVP.Value.X == ProjectedPanel.X && KVP.Value.Y == ProjectedPanel.Y)) //Add the unique panel
+                                {
+                                    PanelDictionary.Add(numPanels, new Panel(ProjectedPanel));
+                                    numPanels++;
+                                }
+                                else if (PanelDictionary.Any(KVP => KVP.Value.X == ProjectedPanel.X && KVP.Value.Y == ProjectedPanel.Y)) //Update the Panel
+                                {
+                                    PanelDictionary[PanelDictionary.Where(KVP => KVP.Value.X == ProjectedPanel.X && KVP.Value.Y == ProjectedPanel.Y).First().Key] = new Panel(ProjectedPanel);
+                                }
+                            }
+                            else if (ScreenOutput[0] == 1)
+                            {
+                                Panel currentPanel = new Panel(Convert.ToInt32(positionX), Convert.ToInt32(positionY), Convert.ToInt32(1));
+                                if (!PanelDictionary.Any(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y)) //Add the unique panel
+                                {
+                                    PanelDictionary.Add(numPanels, new Panel(currentPanel));
+                                    numPanels++;
+                                }
+                                else if (PanelDictionary.Any(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y)) //Update the Panel
+                                {
+                                    PanelDictionary[PanelDictionary.Where(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y).First().Key] = new Panel(currentPanel);
+                                }
+
+                                long adjustX = 0;
+                                long adjustY = 0;
+                                if (input == 1)//North
+                                {
+                                    adjustY = 1;
+                                }
+                                else if (input == 2)//South
+                                {
+                                    adjustY = -1;
+                                }
+                                else if (input == 3)//West
+                                {
+                                    adjustX = -1;
+                                }
+                                else if (input == 4)//East
+                                {
+                                    adjustX = 1;
+                                }
+                                Panel ProjectedPanel = new Panel(Convert.ToInt32(positionX + adjustX), Convert.ToInt32(positionY + adjustY), Convert.ToInt32(3));
+                                if (!PanelDictionary.Any(KVP => KVP.Value.X == ProjectedPanel.X && KVP.Value.Y == ProjectedPanel.Y)) //Add the unique panel
+                                {
+                                    PanelDictionary.Add(numPanels, new Panel(ProjectedPanel));
+                                    positionX += adjustX;
+                                    positionY += adjustY;
+                                    numPanels++;
+                                }
+                                else if (PanelDictionary.Any(KVP => KVP.Value.X == ProjectedPanel.X && KVP.Value.Y == ProjectedPanel.Y)) //Update the Panel
+                                {
+                                    PanelDictionary[PanelDictionary.Where(KVP => KVP.Value.X == ProjectedPanel.X && KVP.Value.Y == ProjectedPanel.Y).First().Key] = new Panel(ProjectedPanel);
+                                    positionX += adjustX;
+                                    positionY += adjustY;
+                                }
+                            }
+                            else if (ScreenOutput[0] == 2)
+                            {
+                                Panel currentPanel = new Panel(Convert.ToInt32(positionX), Convert.ToInt32(positionY), Convert.ToInt32(1));
+                                if (!PanelDictionary.Any(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y)) //Add the unique panel
+                                {
+                                    PanelDictionary.Add(numPanels, new Panel(currentPanel));
+                                    numPanels++;
+                                }
+                                else if (PanelDictionary.Any(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y)) //Update the Panel
+                                {
+                                    PanelDictionary[PanelDictionary.Where(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y).First().Key] = new Panel(currentPanel);
+                                }
+
+                                long adjustX = 0;
+                                long adjustY = 0;
+                                if (input == 1)//North
+                                {
+                                    adjustY = 1;
+                                }
+                                else if (input == 2)//South
+                                {
+                                    adjustY = -1;
+                                }
+                                else if (input == 3)//West
+                                {
+                                    adjustX = -1;
+                                }
+                                else if (input == 4)//East
+                                {
+                                    adjustX = 1;
+                                }
+                                Panel ProjectedPanel = new Panel(Convert.ToInt32(positionX + adjustX), Convert.ToInt32(positionY + adjustY), Convert.ToInt32(2));
+                                if (!PanelDictionary.Any(KVP => KVP.Value.X == ProjectedPanel.X && KVP.Value.Y == ProjectedPanel.Y)) //Add the unique panel
+                                {
+                                    PanelDictionary.Add(numPanels, new Panel(ProjectedPanel));
+                                    positionX += adjustX;
+                                    positionY += adjustY;
+                                    numPanels++;
+                                }
+                                else if (PanelDictionary.Any(KVP => KVP.Value.X == ProjectedPanel.X && KVP.Value.Y == ProjectedPanel.Y)) //Update the Panel
+                                {
+                                    PanelDictionary[PanelDictionary.Where(KVP => KVP.Value.X == ProjectedPanel.X && KVP.Value.Y == ProjectedPanel.Y).First().Key] = new Panel(ProjectedPanel);
+                                    positionX += adjustX;
+                                    positionY += adjustY;
+                                }
+                            }
+                            if (PanelDictionary.Count() > 0 && Display)
+                            {
+                                DisplayScreen15(PanelDictionary);
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("No Output");
+                        }
+                    }
+                    else
+                    {   // determine input
+                        if (PanelDictionary.Any(KVP => KVP.Value.X == Convert.ToInt32(positionX) && KVP.Value.Y == Convert.ToInt32(positionY)))
+                        {
+                            if (!PanelDictionary.Any(KVP => KVP.Value.X == Convert.ToInt32(positionX) && KVP.Value.Y == Convert.ToInt32(positionY + 1)))
+                            {
+                                input = 1;
+                            }
+                            else if (!PanelDictionary.Any(KVP => KVP.Value.X == Convert.ToInt32(positionX) && KVP.Value.Y == Convert.ToInt32(positionY - 1)))
+                            {
+                                input = 2;
+                            }
+                            else if (!PanelDictionary.Any(KVP => KVP.Value.X == Convert.ToInt32(positionX + 1) && KVP.Value.Y == Convert.ToInt32(positionY)))
+                            {
+                                input = 4;
+                            }
+                            else if (!PanelDictionary.Any(KVP => KVP.Value.X == Convert.ToInt32(positionX - 1) && KVP.Value.Y == Convert.ToInt32(positionY)))
+                            {
+                                input = 3;
+                            }
+                            else
+                            {
+                                directControl = true;
+                            }
+                        }
+                        else //We aren't in an exist panel
+                        {
+                            Console.Write("Robot is stuck");
+                            directControl = true;
+                        }
+                        //Postinput
+                        List<long> ScreenOutput = Advent11OpCodeReader(DictionaryInstructions, Convert.ToInt64(input), index, relativeBase, 1);
+                        if (ScreenOutput.Count > 2)
+                        {
+                            if (ScreenOutput[0] == 0)
+                            {
+                                //Positions stay the same
+                                Panel currentPanel = new Panel(Convert.ToInt32(positionX), Convert.ToInt32(positionY), Convert.ToInt32(3));
+                                if (!PanelDictionary.Any(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y)) //Add the unique panel
+                                {
+                                    PanelDictionary.Add(numPanels, new Panel(currentPanel));
+                                    numPanels++;
+                                }
+                                else if (PanelDictionary.Any(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y)) //Update the Panel
+                                {
+                                    PanelDictionary[PanelDictionary.Where(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y).First().Key] = new Panel(currentPanel);
+                                }
+
+                                long adjustX = 0;
+                                long adjustY = 0;
+                                if (input == 1)//North
+                                {
+                                    adjustY = 1;
+                                }
+                                else if (input == 2)//South
+                                {
+                                    adjustY = -1;
+                                }
+                                else if (input == 3)//West
+                                {
+                                    adjustX = -1;
+                                }
+                                else if (input == 4)//East
+                                {
+                                    adjustX = 1;
+                                }
+                                Panel ProjectedPanel = new Panel(Convert.ToInt32(positionX + adjustX), Convert.ToInt32(positionY + adjustY), Convert.ToInt32(0));
+                                if (!PanelDictionary.Any(KVP => KVP.Value.X == ProjectedPanel.X && KVP.Value.Y == ProjectedPanel.Y)) //Add the unique panel
+                                {
+                                    PanelDictionary.Add(numPanels, new Panel(ProjectedPanel));
+                                    numPanels++;
+                                }
+                                else if (PanelDictionary.Any(KVP => KVP.Value.X == ProjectedPanel.X && KVP.Value.Y == ProjectedPanel.Y)) //Update the Panel
+                                {
+                                    PanelDictionary[PanelDictionary.Where(KVP => KVP.Value.X == ProjectedPanel.X && KVP.Value.Y == ProjectedPanel.Y).First().Key] = new Panel(ProjectedPanel);
+                                }
+                            }
+                            else if (ScreenOutput[0] == 1)
+                            {
+                                Panel currentPanel = new Panel(Convert.ToInt32(positionX), Convert.ToInt32(positionY), Convert.ToInt32(1));
+                                if (!PanelDictionary.Any(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y)) //Add the unique panel
+                                {
+                                    PanelDictionary.Add(numPanels, new Panel(currentPanel));
+                                    numPanels++;
+                                }
+                                else if (PanelDictionary.Any(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y)) //Update the Panel
+                                {
+                                    PanelDictionary[PanelDictionary.Where(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y).First().Key] = new Panel(currentPanel);
+                                }
+
+                                long adjustX = 0;
+                                long adjustY = 0;
+                                if (input == 1)//North
+                                {
+                                    adjustY = 1;
+                                }
+                                else if (input == 2)//South
+                                {
+                                    adjustY = -1;
+                                }
+                                else if (input == 3)//West
+                                {
+                                    adjustX = -1;
+                                }
+                                else if (input == 4)//East
+                                {
+                                    adjustX = 1;
+                                }
+                                Panel ProjectedPanel = new Panel(Convert.ToInt32(positionX + adjustX), Convert.ToInt32(positionY + adjustY), Convert.ToInt32(3));
+                                if (!PanelDictionary.Any(KVP => KVP.Value.X == ProjectedPanel.X && KVP.Value.Y == ProjectedPanel.Y)) //Add the unique panel
+                                {
+                                    PanelDictionary.Add(numPanels, new Panel(ProjectedPanel));
+                                    positionX += adjustX;
+                                    positionY += adjustY;
+                                    numPanels++;
+                                }
+                                else if (PanelDictionary.Any(KVP => KVP.Value.X == ProjectedPanel.X && KVP.Value.Y == ProjectedPanel.Y)) //Update the Panel
+                                {
+                                    PanelDictionary[PanelDictionary.Where(KVP => KVP.Value.X == ProjectedPanel.X && KVP.Value.Y == ProjectedPanel.Y).First().Key] = new Panel(ProjectedPanel);
+                                    positionX += adjustX;
+                                    positionY += adjustY;
+                                }
+                            }
+                            else if (ScreenOutput[0] == 2)
+                            {
+                                Panel currentPanel = new Panel(Convert.ToInt32(positionX), Convert.ToInt32(positionY), Convert.ToInt32(1));
+                                if (!PanelDictionary.Any(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y)) //Add the unique panel
+                                {
+                                    PanelDictionary.Add(numPanels, new Panel(currentPanel));
+                                    numPanels++;
+                                }
+                                else if (PanelDictionary.Any(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y)) //Update the Panel
+                                {
+                                    PanelDictionary[PanelDictionary.Where(KVP => KVP.Value.X == currentPanel.X && KVP.Value.Y == currentPanel.Y).First().Key] = new Panel(currentPanel);
+                                }
+
+                                long adjustX = 0;
+                                long adjustY = 0;
+                                if (input == 1)//North
+                                {
+                                    adjustY = 1;
+                                }
+                                else if (input == 2)//South
+                                {
+                                    adjustY = -1;
+                                }
+                                else if (input == 3)//West
+                                {
+                                    adjustX = -1;
+                                }
+                                else if (input == 4)//East
+                                {
+                                    adjustX = 1;
+                                }
+                                Panel ProjectedPanel = new Panel(Convert.ToInt32(positionX + adjustX), Convert.ToInt32(positionY + adjustY), Convert.ToInt32(2));
+                                if (!PanelDictionary.Any(KVP => KVP.Value.X == ProjectedPanel.X && KVP.Value.Y == ProjectedPanel.Y)) //Add the unique panel
+                                {
+                                    PanelDictionary.Add(numPanels, new Panel(ProjectedPanel));
+                                    positionX += adjustX;
+                                    positionY += adjustY;
+                                    numPanels++;
+                                }
+                                else if (PanelDictionary.Any(KVP => KVP.Value.X == ProjectedPanel.X && KVP.Value.Y == ProjectedPanel.Y)) //Update the Panel
+                                {
+                                    PanelDictionary[PanelDictionary.Where(KVP => KVP.Value.X == ProjectedPanel.X && KVP.Value.Y == ProjectedPanel.Y).First().Key] = new Panel(ProjectedPanel);
+                                    positionX += adjustX;
+                                    positionY += adjustY;
+                                }
+                            }
+                            if (PanelDictionary.Count() > 0 && Display)
+                            {
+                                DisplayScreen15(PanelDictionary);
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("No Output");
+                        }
+                    }
+                }
+            }
+            else if (key.Contains("16a"))
+            {
+                string Advent16Input = Properties.Resources.Advent16;
+                List<int> inputSignal = new List<int>();
+                foreach (char item in Advent16Input)
+                {
+                    inputSignal.Add(Int32.Parse(item.ToString()));
+                }
+                List<int> phasePattern = new List<int>() { 0, 1, 0, -1 };
+                int inputSignalLength = inputSignal.Count();
+                int patternLength = phasePattern.Count();
+                int numberOfPhases = 100;
+                bool inputFull = false;
+                Dictionary<int, List<int>> ResultDictionary = new Dictionary<int, List<int>>();
+                for (int phase = 0; phase < numberOfPhases; phase++) // iterative
+                {
+                    List<int> outputSignal = new List<int>();
+                    List<int> fullInput = new List<int>();
+                    inputFull = false;
+                    for (int index = 0; index < inputSignalLength; index++)
+                    {
+                        fullInput = new List<int>();
+                        inputFull = false;
+                        // Get Input List
+                        while (!inputFull)
+                        {
+                            // generate input list goes out to 4 for example
+                            for (int inputIndexPhase = 0; inputIndexPhase < patternLength && !inputFull; inputIndexPhase++)
+                            {
+                                // inputs number at inputIndexPhase index number of times
+                                for (int inputter = 0; inputter <= index && !inputFull; inputter++)
+                                {
+                                    fullInput.Add(phasePattern[inputIndexPhase]);
+                                    if (fullInput.Count > inputSignalLength)
+                                    {
+                                        fullInput.RemoveAt(0);
+                                        inputFull = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        int indexInputResult = 0;
+                        // Iterate for each item and add then into the index
+                        for (int iterator = 0; iterator < fullInput.Count(); iterator++)
+                        {
+                            indexInputResult = indexInputResult + (inputSignal[iterator] * fullInput[iterator]);
+                        }
+                        outputSignal.Add(Math.Abs(indexInputResult % 10));
+                    }
+                    //Console.WriteLine("Phase: " + phase.ToString() + " Output: ");
+                    //foreach(int outputItem in outputSignal)
+                    //{
+                    //    Console.Write(outputItem.ToString() + " ");
+                    //}
+                    //Console.Write(Environment.NewLine);
+                    ResultDictionary[phase] = outputSignal;
+                    inputSignal = new List<int>(outputSignal);
+                }               
+                foreach(int outputItem in ResultDictionary.Last().Value)
+                {
+                    Console.Write(outputItem.ToString() + " ");
+                }
+            }
+            else if (key.Contains("16b"))
+            {
+                string Advent16Input = Properties.Resources.Advent16;
+                string AdventOffSetString = Advent16Input.Substring(0, 7);
+                int AdventOffSet = Int32.Parse(AdventOffSetString);
+                List<int> inputSignal = new List<int>();
+                int totalSignal = 0;
+                int[,] transform = new int[10, 3];
+                for (int d = 0; d < 10; d++)
+                    for (int m = 0; m < 3; m++)
+                        transform[d, m] = (d * (m - 1)) % 10;
+                while (totalSignal < 10000)
+                {
+                    for(int InputInterator = 0; InputInterator < Advent16Input.Length; InputInterator++)
+                    {
+                        inputSignal.Add(Int32.Parse(Advent16Input[InputInterator % Advent16Input.Length].ToString()));
+                    }
+                    totalSignal++;
+                }
+
+                //List<int> phasePattern = new List<int>() { 0, 1, 0, -1 };
+                List<int> phasePattern = new List<int>() { 1, 2, 1, 0 };
+
+                int inputSignalLength = inputSignal.Count();
+                int patternLength = phasePattern.Count();
+                int numberOfPhases = 100;
+                bool inputFull = false;
+                List<int> outputSignal = new List<int>();
+                List<int> intputSignalNext = new List<int>();
+                Dictionary<int, List<int>> ResultDictionary = new Dictionary<int, List<int>>();
+                for (int phase = 0; phase < numberOfPhases; phase++) // iterative
+                {
+                    int index;
+                    for (index = AdventOffSet; index < inputSignalLength/2; index++)
+                    {
+                        int modifier = 0;
+                        for(int compIndex = index; compIndex < inputSignalLength; compIndex++)
+                        {
+                            if((compIndex + 1) % (index + 1) == 0)
+                            {
+                                modifier = (modifier == 3) ? 0 : modifier + 1;
+                            }
+                            outputSignal[index] += transform[inputSignal[compIndex], phasePattern[modifier]];
+                        }
+                        outputSignal[index] = (outputSignal[index] < 0) ? -outputSignal[index] % 10 : outputSignal[index] % 10;
+                    }
+                    int currentValue = 0;
+                    for(int outputIndex = inputSignalLength - 1; outputIndex >= index; outputIndex--)
+                    {
+                        currentValue += inputSignal[outputIndex];
+                        outputSignal[outputIndex] = (currentValue < 0) ? (-currentValue % 10) : (currentValue % 10);
+                    }
+                    intputSignalNext = new List<int>(inputSignal);
+                    inputSignal = new List<int>(outputSignal);
+                    outputSignal = new List<int>(outputSignal);
+                }
+                List<int> OutputIntListResultAnswer = ResultDictionary.Last().Value;
+                List<int> OutputIntListResultAnswerSubset = OutputIntListResultAnswer.GetRange(AdventOffSet, 8);
+                for(int reader = AdventOffSet; reader < AdventOffSet+8; reader++)
+                {
+                    Console.Write(inputSignal[reader]);
+                }
+            }
             else if (key.Contains("Test1"))
             {
                 Robot EmergencyPaintingBot = new Robot();
@@ -1163,35 +1677,7 @@ namespace Advent8_12Solver
             }
             else if (key.Contains("Test2"))
             {
-                string[] Advent11Values = Properties.Resources.Advent11.Split(',');
-                Dictionary<long, long> DictionaryInstructions = new Dictionary<long, long>();
-                for (int i = 0; i < Advent11Values.Length; i++)
-                {
-                    DictionaryInstructions[i] = long.Parse(Advent11Values[i]);
-                }
-                long index = 0;
-                List<long> inputs = new List<long>();//0, 0, 0, 0, 1, 0, 0);
-                inputs.Add(0);
-                inputs.Add(0);
-                inputs.Add(0);
-                inputs.Add(0);
-                inputs.Add(1);
-                inputs.Add(0);
-                inputs.Add(0);
-                foreach (long input in inputs)
-                {
-                    List<long> outputs = new List<long>();
-                    outputs = Advent11OpCodeReader(DictionaryInstructions, input, index);
-                    if (outputs.Count > 0)
-                    {
-                        index = outputs[2];
-                        Console.WriteLine("output 1: " + outputs[0] + " output 2: " + outputs[1] + " index: " + outputs[2]);
-                    }
-                    else
-                    {
-
-                    }
-                }
+ 
             }
             else
             {
@@ -1199,6 +1685,48 @@ namespace Advent8_12Solver
             }
             Console.WriteLine("Finished");
             Console.ReadLine();
+        }
+        public static void DisplayScreen15(Dictionary<long, Panel> PanelDictionary)
+        {
+            int xMax = PanelDictionary.Max(kvp => kvp.Value.X);
+            int yMax = PanelDictionary.Max(kvp => kvp.Value.Y);
+            int xMin = PanelDictionary.Min(kvp => kvp.Value.X);
+            int yMin = PanelDictionary.Min(kvp => kvp.Value.Y);
+            for (int y = yMax; y >= yMin; y--)
+            {
+                for (int x = xMin; x <= xMax; x++)
+                {
+                    if (PanelDictionary.Any(kvp => kvp.Value.X == x && kvp.Value.Y == y))
+                    {
+                        long color = PanelDictionary.Where(kvp => kvp.Value.X == x && kvp.Value.Y == y).First().Value.Color;
+                        if (color == 0)
+                        {
+                            Console.Write("=");
+                        }
+                        if (color == 1)
+                        {
+                            Console.Write(".");
+                        }
+                        if (color == 2)
+                        {
+                            Console.Write("O");
+                        }
+                        if (color == 3)
+                        {
+                            Console.Write("R");
+                        }
+                        if (color > 3 || color < 0)
+                        {
+                            Console.Write("X");
+                        }
+                    }
+                    else
+                    {
+                        Console.Write(" ");
+                    }
+                }
+                Console.Write(Environment.NewLine);
+            }
         }
         public class Formula
         {
@@ -1969,7 +2497,7 @@ namespace Advent8_12Solver
         //{
 
         //}
-        private class Panel
+        public class Panel
         {
             public int X = 0;
             public int Y = 0;
